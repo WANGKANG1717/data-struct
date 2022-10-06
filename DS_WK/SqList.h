@@ -25,7 +25,9 @@ template <class T> class SqList {
     inline void checkRange(int index) const;
     inline void checkRange(int low, int high) const;
     //比较函数 默认比较器
-    inline static bool cmp(const T a, const T b);
+    //本来想默认一个存储器的，结果失败了
+    //还是暂时放弃
+    inline bool cmp(const T a, const T b);
 
   public:
     SqList();
@@ -41,10 +43,12 @@ template <class T> class SqList {
     void print(int low, int high) const;
     //
     void insert(int index, T x); //插入
+    void _delete(int index); // 删除
     void bubbleSort(int low, int high,
                     bool (*func)(T, T)); //升序排序 第三个参数是比较参数
-    T binarySearch(int low, int high, T x); //二分查找
-    T search(int low, int high, T x);       //顺序查找
+    //返回下标
+    int binarySearch(int low, int high, T x); //二分查找
+    int search(int low, int high, T x);       //顺序查找
     void reverse(int low, int high);
 };
 
@@ -131,8 +135,16 @@ template <class T> void SqList<T>::insert(int index, T x) {
     data[index] = x;
 }
 
+template <class T> void SqList<T>::_delete(int index) {
+    checkRange(index);
+    cout << "delete!" << endl;
+    for (int i = index; i <length-1; i++) {
+        data[i] = data[i + 1];
+    }
+}
+
 template <class T>
-void SqList<T>::bubbleSort(int low, int high, bool (*func)(T, T)=cmp)  {
+void SqList<T>::bubbleSort(int low, int high, bool (*func)(T, T))  {
     checkRange(low, high);
     cout << "bubbleSort" << endl;
     for (int i = high; i > low; i--) {
@@ -144,10 +156,41 @@ void SqList<T>::bubbleSort(int low, int high, bool (*func)(T, T)=cmp)  {
     }
 }
 
-template <class T> T SqList<T>::binarySearch(int low, int high, T x) {}
+template <class T> int SqList<T>::binarySearch(int low, int high, T x) {
+    checkRange(low, high);
+    cout << "binarySearch" << endl;
+    while(low<=high) {
+        int mid=(low+high)/2;
+        if(data[mid]==x) {
+            return mid;
+        }
+        else if(x<data[mid]) {
+            high=mid-1;
+        }
+        else {
+            low=mid+1;
+        }
+    }
+    return -1;
+}
 
-template <class T> T SqList<T>::search(int low, int high, T x) {}
+template <class T> int SqList<T>::search(int low, int high, T x) {
+    checkRange(low, high);
+    for(int i=low; i<high; i++) {
+        if(data[i]==x) {
+            return i;
+        }
+    }
+    return -1;
+}
 
-template <class T> void SqList<T>::reverse(int low, int high) {}
+template <class T> void SqList<T>::reverse(int low, int high) {
+    checkRange(low, high);
+    while(low<high) {
+        swap(data[low], data[high]);
+        low++;
+        high--;
+    }
+}
 
 #endif

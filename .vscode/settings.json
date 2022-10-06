@@ -35,7 +35,8 @@
         "istream": "cpp",
         "limits": "cpp",
         "type_traits": "cpp",
-        "exception": "cpp"
+        "exception": "cpp",
+        "optional": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
