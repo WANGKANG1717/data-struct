@@ -20,6 +20,13 @@ template <class T> class SqList {
     T *data;
     int length;
 
+    //检查越界
+    inline void checkRange() const;
+    inline void checkRange(int index) const;
+    inline void checkRange(int low, int high) const;
+    //比较函数 默认比较器
+    inline static bool cmp(const T a, const T b);
+
   public:
     SqList();
     SqList(int length);
@@ -34,11 +41,10 @@ template <class T> class SqList {
     void print(int low, int high) const;
     //
     void insert(int index, T x); //插入
-    void sortUP(int low, int high,
-                int (*func)(T, T)); //升序排序 第三个参数是比较参数
-    void sortDOWN(int low, int high, int (*func)(T, T)); //降序排序
-    T binarySearch(int low, int high, T x);              //二分查找
-    T search(int low, int high, T x);                    //顺序查找
+    void bubbleSort(int low, int high,
+                    bool (*func)(T, T)); //升序排序 第三个参数是比较参数
+    T binarySearch(int low, int high, T x); //二分查找
+    T search(int low, int high, T x);       //顺序查找
     void reverse(int low, int high);
 };
 
@@ -62,30 +68,46 @@ template <class T> SqList<T>::~SqList() {
     cout << "~SqList: delete success!" << endl;
 }
 
-template <class T> int SqList<T>::getLength() const { return length; }
+template <class T> inline void SqList<T>::checkRange() const {
+    if (length == 0) {
+        throw OutOfRange();
+    }
+}
 
-template <class T> T SqList<T>::getData(int index) const {
+template <class T> inline void SqList<T>::checkRange(int index) const {
     if (length == 0) {
         throw OutOfRange();
     } else if (index < 0 || index >= length) {
         throw OutOfRange(length, index);
     }
+}
+
+template <class T> inline void SqList<T>::checkRange(int low, int high) const {
+    if (length == 0) {
+        throw OutOfRange();
+    } else if (low < 0 || high >= length || low > high) {
+        throw OutOfRange(length, low, high);
+    }
+}
+
+template <class T> inline bool SqList<T>::cmp(T a, T b) {
+    return a<b;
+}
+
+template <class T> int SqList<T>::getLength() const { return length; }
+
+template <class T> T SqList<T>::getData(int index) const {
+    checkRange(index);
     return data[index];
 }
 
 template <class T> void SqList<T>::setData(T x, int index) {
-    if (length == 0) {
-        throw OutOfRange();
-    } else if (index < 0 || index >= length) {
-        throw OutOfRange(length, index);
-    }
+    checkRange(index);
     data[index] = x;
 }
 
 template <class T> void SqList<T>::print() const {
-    if (length == 0) {
-        throw OutOfRange();
-    }
+    checkRange();
     for (int i = 0; i < length; i++) {
         cout << data[i] << " ";
     }
@@ -93,24 +115,34 @@ template <class T> void SqList<T>::print() const {
 }
 
 template <class T> void SqList<T>::print(int low, int high) const {
-    if (length == 0) {
-        throw OutOfRange();
-    } else if (low < 0 || high >= length || low > high) {
-        throw OutOfRange(length, low, high);
-    }
+    checkRange(low, high);
     for (int i = low; i <= high; i++) {
         cout << data[i] << " ";
     }
     cout << endl;
 }
 
-template <class T> void SqList<T>::insert(int index, T x) {}
+template <class T> void SqList<T>::insert(int index, T x) {
+    checkRange(index);
+    cout << "insert!" << endl;
+    for (int i = length - 1; i > index; i--) {
+        data[i] = data[i - 1];
+    }
+    data[index] = x;
+}
 
 template <class T>
-void SqList<T>::sortUP(int low, int high, int (*func)(T, T)) {}
-
-template <class T>
-void SqList<T>::sortDOWN(int low, int high, int (*func)(T, T)) {}
+void SqList<T>::bubbleSort(int low, int high, bool (*func)(T, T)=cmp)  {
+    checkRange(low, high);
+    cout << "bubbleSort" << endl;
+    for (int i = high; i > low; i--) {
+        for (int j = low; j < i; j++) {
+            if ((*func)(data[i], data[j])) {
+                swap(data[i], data[j]);
+            }
+        }
+    }
+}
 
 template <class T> T SqList<T>::binarySearch(int low, int high, T x) {}
 
