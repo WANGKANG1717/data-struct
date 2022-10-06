@@ -36,7 +36,25 @@
         "limits": "cpp",
         "type_traits": "cpp",
         "exception": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "array": "cpp",
+        "atomic": "cpp",
+        "cctype": "cpp",
+        "clocale": "cpp",
+        "cstdarg": "cpp",
+        "cstddef": "cpp",
+        "cstdint": "cpp",
+        "cwchar": "cpp",
+        "cwctype": "cpp",
+        "deque": "cpp",
+        "memory_resource": "cpp",
+        "string_view": "cpp",
+        "tuple": "cpp",
+        "initializer_list": "cpp",
+        "new": "cpp",
+        "stdexcept": "cpp",
+        "streambuf": "cpp",
+        "typeinfo": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
