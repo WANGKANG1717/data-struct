@@ -19,6 +19,7 @@ int main() {
     } catch (exception &e) {
         cout << e.what() << endl;
     }
+    cout<<"°¡´ó´ó";
 
     return 0;
 }
