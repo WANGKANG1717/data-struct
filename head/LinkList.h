@@ -21,12 +21,12 @@ using namespace std;
  */
 
 template <class T> class LinkNode {
-  private:
-    T data;
-    T *next;
-
   public:
-    LinkNode() { next = NULL; }
+    T data;
+    LinkNode<T> *next;
+
+    LinkNode() : next(NULL){};
+    LinkNode(LinkNode<T> *next) : next(next) {}
     LinkNode(T data, T *next) : data(data), next(next) {}
     ~LinkNode();
 };
@@ -35,18 +35,70 @@ template <class T> class LinkNode {
  * @date: 2022-10-06 16:03:23
  * @description: 带头节点
  */
-template <class T>
-class LinkList {
+template <class T> class LinkList : public LinkNode<T> {
   private:
-    LinkNode<T> head;
-    int length;     //当前链表中的节点个数
+    LinkNode<T> *head;
+    LinkNode<T> *tail;
+    LinkNode<T> *curr;
+    int length;
+
   public:
-    LinkList(/* args */);
+    LinkList();
     ~LinkList();
+    //
+    void create(int length);
+    T getData(int index);
+    LinkNode<T> *Locate(T x);
+    bool isEmpty();
+    void pre();
+    void next();
+    bool insert(int index);
+    bool remove(int index);
+    void removeAll();
+    void print();
+    void printAll();
 };
+template <class T> LinkList<T>::LinkList() {
+    head = new LinkNode<T>(NULL);
+    curr = tail = head;
 
-LinkList::LinkList(/* args */) {}
+    length = 0;
+}
 
-LinkList::~LinkList() {}
+template <class T> LinkList<T>::~LinkList() { removeAll(); }
+
+/**
+ * @date: 2022-10-07 13:23:06
+ * @description: 尾插法创建单链表
+ */
+
+template <class T> void LinkList<T>::create(int length) {
+    T x;
+    for (int i = 0; i < length; i++) {
+        cin >> x;
+        LinkNode<T> tmp = new LinkNode<T>(x, NULL);
+        tail->next = tmp;
+        tail = tmp;
+        length++;
+    }
+}
+
+template <class T> T LinkList<T>::getData(int index) {
+    OutOfRange(length, index, 1);
+    curr = head->next;
+    for (int i = 0; i < index; i++) {
+        curr = curr->next;
+    }
+    return curr->data;
+}
+
+
+template <class T> void LinkList<T>::removeAll() {
+    while(head->next) {
+      LinkNode<T> *tmp=head->next;
+      head->next=tmp->next;
+      delete tmp;
+    }
+}
 
 #endif
