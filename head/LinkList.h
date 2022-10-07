@@ -25,10 +25,9 @@ template <class T> class LinkNode {
     T data;
     LinkNode<T> *next;
 
-    LinkNode() : next(NULL){};
-    LinkNode(LinkNode<T> *next) : next(next) {}
-    LinkNode(T data, T *next) : data(data), next(next) {}
-    ~LinkNode();
+    LinkNode(LinkNode<T> *next = NULL) : next(next) {}
+    LinkNode(T data, LinkNode<T> *next) : data(data), next(next) {}
+    ~LinkNode(){};
 };
 
 /**
@@ -42,11 +41,14 @@ template <class T> class LinkList : public LinkNode<T> {
     LinkNode<T> *curr;
     int length;
 
+    inline void checkRange() const;
+    inline void checkRange(int index) const;
+
   public:
     LinkList();
     ~LinkList();
     //
-    void create(int length);
+    void create(T data[], int n);
     T getData(int index);
     LinkNode<T> *Locate(T x);
     bool isEmpty();
@@ -56,8 +58,9 @@ template <class T> class LinkList : public LinkNode<T> {
     bool remove(int index);
     void removeAll();
     void print();
-    void printAll();
+    int getLength();
 };
+
 template <class T> LinkList<T>::LinkList() {
     head = new LinkNode<T>(NULL);
     curr = tail = head;
@@ -67,16 +70,29 @@ template <class T> LinkList<T>::LinkList() {
 
 template <class T> LinkList<T>::~LinkList() { removeAll(); }
 
+template <class T> inline void LinkList<T>::checkRange() const {
+    if (length == 0) {
+        throw OutOfRange(1);
+    }
+}
+
+template <class T> inline void LinkList<T>::checkRange(int index) const {
+    if (length == 0) {
+        throw OutOfRange(1);
+    } else if (index < 0 || index >= length) {
+        throw OutOfRange(length, index, 1);
+    }
+}
+
 /**
  * @date: 2022-10-07 13:23:06
  * @description: 尾插法创建单链表
  */
 
-template <class T> void LinkList<T>::create(int length) {
+template <class T> void LinkList<T>::create(T data[], int n) {
     T x;
-    for (int i = 0; i < length; i++) {
-        cin >> x;
-        LinkNode<T> tmp = new LinkNode<T>(x, NULL);
+    for (int i = 0; i < n; i++) {
+        LinkNode<T> *tmp = new LinkNode<T>(data[i], NULL);
         tail->next = tmp;
         tail = tmp;
         length++;
@@ -84,7 +100,7 @@ template <class T> void LinkList<T>::create(int length) {
 }
 
 template <class T> T LinkList<T>::getData(int index) {
-    OutOfRange(length, index, 1);
+    checkRange(index);
     curr = head->next;
     for (int i = 0; i < index; i++) {
         curr = curr->next;
@@ -92,13 +108,42 @@ template <class T> T LinkList<T>::getData(int index) {
     return curr->data;
 }
 
-
 template <class T> void LinkList<T>::removeAll() {
-    while(head->next) {
-      LinkNode<T> *tmp=head->next;
-      head->next=tmp->next;
-      delete tmp;
+    while (head->next) {
+        LinkNode<T> *tmp = head->next;
+        head = tmp->next;
+        delete tmp;
     }
+    tail = curr = head;
+}
+
+template <class T> void LinkList<T>::print() {
+    LinkNode<T> *p = head->next;
+    while (p) {
+        cout << p->data << " ";
+        p = p->next;
+    }
+    cout << endl;
+}
+
+template <class T> bool LinkList<T>::isEmpty() {
+    if (length == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+template <class T> int LinkList<T>::getLength() { return length; }
+
+template <class T> LinkNode<T> *LinkList<T>::Locate(T x) {
+    checkRange();
+    LinkNode<T> *p = head->next;
+    for (int i = 0; i < length; i++, p=p->next) {
+        if (p->data == x) {
+            break;
+        }
+    }
+    return p;
 }
 
 #endif

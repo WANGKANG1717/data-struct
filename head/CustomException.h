@@ -19,18 +19,18 @@ using namespace std;
 class OutOfRange : public exception {
   private:
     static const string type[10];
-    int flag;  //不同的flag表示不同的错误
-    int typeFlag;  //标识数据结构类型
-    int len;   //当前数组的长度
-    int index; //当前使用的数组下标
+    int flag;     //不同的flag表示不同的错误
+    int typeFlag; //标识数据结构类型
+    int len;      //当前数组的长度
+    int index;    //当前使用的数组下标
     int high;
     int low;
 
   public:
-  //默认数组
-    OutOfRange(int TypeFlag=0);
-    OutOfRange(int len, int index,int typeFlag=0);
-    OutOfRange(int len, int low, int high,int typeFlag=0);
+    //默认数组
+    OutOfRange(int TypeFlag);
+    OutOfRange(int len, int index, int typeFlag);
+    OutOfRange(int len, int low, int high, int typeFlag);
     const char *what() const throw();
     ~OutOfRange(){};
 };
@@ -39,25 +39,27 @@ const string OutOfRange::type[] = {"Array", "LinkList"};
 
 OutOfRange::OutOfRange(int TypeFlag) : flag(1), typeFlag(TypeFlag) {}
 
-OutOfRange::OutOfRange(int len, int index, int typeFlag) : flag(2), len(len), index(index), typeFlag(typeFlag) {}
+OutOfRange::OutOfRange(int len, int index, int typeFlag)
+    : flag(2), len(len), index(index), typeFlag(typeFlag) {}
 
 OutOfRange::OutOfRange(int len, int low, int high, int typeFlag)
-    : flag(3), len(len), low(low), high(high) , typeFlag(typeFlag) {}
+    : flag(3), len(len), low(low), high(high), typeFlag(typeFlag) {}
 
 const char *OutOfRange::what() const throw() {
     string out;
     stringstream ss;
     switch (flag) {
     case 1:
-        ss << "Error: empty "<<type[typeFlag]<<".";
+        ss << "Error: empty " << type[typeFlag] << ".";
         break;
     case 2:
-        ss << "Error: out of range( "<<type[typeFlag]<<" length " << len << ", access index "
-           << index << " )";
+        ss << "Error: out of range( " << type[typeFlag] << " length " << len
+           << ", access index " << index << " )";
         break;
     case 3:
-        ss << "Error: please check your "<<type[typeFlag]<<" range( len:" << len << " low:" << low
-           << " high:" << high << " )";
+        ss << "Error: please check your " << type[typeFlag]
+           << " range( len:" << len << " low:" << low << " high:" << high
+           << " )";
         break;
     default:
         ss << "Unknown exception.";
