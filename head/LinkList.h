@@ -1,10 +1,9 @@
 /**
- * @filename: LinkList.h
  * @author: WangKang
  * @blog: kang17.xyz
- * @email: 1686617586@qq.com
- * @date: 2022-10-06 15:57:28
- * @description: 单链表模板类
+ * @filename: LinkList.h
+ * @date: 2022-10-08 14:09:40
+ * @description: 单链表头文件
  */
 /**
  * 不再使用异常，麻烦
@@ -47,7 +46,7 @@ template <class T> class LinkList : public LinkNode<T> {
     ~LinkList();
     //
     void create(T data[], int n);
-    T getData(int index);
+    bool getData(int index, T &data);
     LinkNode<T> *Locate(T x);
     bool isEmpty();
     void pre();
@@ -83,17 +82,18 @@ template <class T> void LinkList<T>::create(T data[], int n) {
     }
 }
 
-template <class T> T LinkList<T>::getData(int index) {
+template <class T> bool LinkList<T>::getData(int index, T &data) {
     if (index < 0 || index > length) {
         cout << "Error: out of Range";
-        return NULL;
+        return false;
     }
 
     curr = head->next;
     for (int i = 0; i < index; i++) {
         curr = curr->next;
     }
-    return curr->data;
+    data = curr->data;
+    return true;
 }
 
 template <class T> void LinkList<T>::removeAll() {
@@ -126,7 +126,7 @@ template <class T> int LinkList<T>::getLength() { return length; }
 template <class T> LinkNode<T> *LinkList<T>::Locate(T x) {
     if (length == 0) {
         cout << "Error: Empty LinkList!" << endl;
-        return;
+        return NULL;
     }
     LinkNode<T> *p = head->next;
     for (int i = 0; i < length; i++, p = p->next) {

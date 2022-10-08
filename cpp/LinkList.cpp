@@ -1,6 +1,7 @@
 #include "../head/LinkList.h"
 #include <iostream>
 using namespace std;
+#define debug(x) cout << "x = " << x << endl
 int main() {
     LinkList<int> link;
     int a[10] = {1, 2, 3, 4, 5, 6, 4, 3, 1, 1};
@@ -8,18 +9,20 @@ int main() {
     // cout<<link.isEmpty()<<endl;
     // link.print();
     try {
-        cout << link.getData(9) << endl;
+        int b = 10;
+        cout << link.getData(5, b) << endl;
+        debug(b);
         LinkNode<int> *p = link.Locate(6);
         if (p == NULL) {
             cout << "NULL" << endl;
         } else {
             cout << p->data << endl;
-            cout<<p->next->data<<endl;
+            cout << p->next->data << endl;
         }
     } catch (exception &e) {
         cout << e.what() << endl;
     }
-    cout<<"啊大大";
+    cout << "啊大大";
 
     return 0;
 }
