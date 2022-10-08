@@ -37,30 +37,25 @@ template <class T> class LinkNode {
 template <class T> class LinkList : public LinkNode<T> {
   private:
     LinkNode<T> *head;
-    LinkNode<T> *tail;
-    LinkNode<T> *curr;
     int length;
 
   public:
     LinkList();
     ~LinkList();
     //
-    void create(T data[], int n);
-    bool getData(int index, T &data);
-    LinkNode<T> *Locate(T x);
-    bool isEmpty();
-    void pre();
-    void next();
-    bool insert(int index);
+    void create(T data[], int n);     //
+    bool getData(int index, T &data); //
+    LinkNode<T> *Locate(T x);         //
+    bool isEmpty();                   //
+    bool insert(int index, T);
     bool remove(int index);
-    void removeAll();
-    void print();
-    int getLength();
+    void removeAll(); //
+    void print();     //
+    int getLength();  //
 };
 
 template <class T> LinkList<T>::LinkList() {
     head = new LinkNode<T>(NULL);
-    curr = tail = head;
 
     length = 0;
 }
@@ -74,25 +69,26 @@ template <class T> LinkList<T>::~LinkList() { removeAll(); }
 
 template <class T> void LinkList<T>::create(T data[], int n) {
     T x;
+    LinkNode<T> *p=head;
     for (int i = 0; i < n; i++) {
         LinkNode<T> *tmp = new LinkNode<T>(data[i], NULL);
-        tail->next = tmp;
-        tail = tmp;
+        p->next = tmp;
+        p=tmp;
         length++;
     }
 }
 
 template <class T> bool LinkList<T>::getData(int index, T &data) {
-    if (index < 0 || index > length) {
+    if (index < 0 || index >= length) {
         cout << "Error: out of Range";
         return false;
     }
 
-    curr = head->next;
+    LinkNode<T> *p = head->next;
     for (int i = 0; i < index; i++) {
-        curr = curr->next;
+        p = p->next;
     }
-    data = curr->data;
+    data = p->data;
     return true;
 }
 
@@ -102,7 +98,6 @@ template <class T> void LinkList<T>::removeAll() {
         head = tmp->next;
         delete tmp;
     }
-    tail = curr = head;
 }
 
 template <class T> void LinkList<T>::print() {
@@ -135,6 +130,42 @@ template <class T> LinkNode<T> *LinkList<T>::Locate(T x) {
         }
     }
     return p;
+}
+
+template <class T> bool LinkList<T>::insert(int index, T x) {
+    if (index < 0 || index > length) {
+        cout << "Error: out of Range";
+        return false;
+    }
+
+    LinkNode<T> *pre = head;
+    LinkNode<T> *p = pre->next;
+    for (int i = 0; i < index; i++) {
+        pre = pre->next;
+        p = pre->next;
+    }
+    LinkNode<T> *tmp = new LinkNode<T>(x, p);
+    pre->next = tmp;
+
+    return true;
+}
+
+template <class T> bool LinkList<T>::remove(int index) {
+    if (index < 0 || index >= length) {
+        cout << "Error: out of Range";
+        return false;
+    }
+
+    LinkNode<T> *pre = head;
+    LinkNode<T> *p = pre->next;
+    for (int i = 0; i < index; i++) {
+        pre = pre->next;
+        p = pre->next;
+    }
+    pre->next = p->next;
+    delete (p);
+
+    return true;
 }
 
 #endif

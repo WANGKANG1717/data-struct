@@ -6,23 +6,28 @@ int main() {
     LinkList<int> link;
     int a[10] = {1, 2, 3, 4, 5, 6, 4, 3, 1, 1};
     link.create(a, 10);
+    link.print();
+    link.insert(7, 199);
+    link.print();
+    link.remove(7);
+    link.print();
     // cout<<link.isEmpty()<<endl;
     // link.print();
-    try {
-        int b = 10;
-        cout << link.getData(5, b) << endl;
-        debug(b);
-        LinkNode<int> *p = link.Locate(6);
-        if (p == NULL) {
-            cout << "NULL" << endl;
-        } else {
-            cout << p->data << endl;
-            cout << p->next->data << endl;
-        }
-    } catch (exception &e) {
-        cout << e.what() << endl;
-    }
-    cout << "啊大大";
+    // try {
+    //     int b = 10;
+    //     cout << link.getData(5, b) << endl;
+    //     debug(b);
+    //     LinkNode<int> *p = link.Locate(6);
+    //     if (p == NULL) {
+    //         cout << "NULL" << endl;
+    //     } else {
+    //         cout << p->data << endl;
+    //         cout << p->next->data << endl;
+    //     }
+    // } catch (exception &e) {
+    //     cout << e.what() << endl;
+    // }
+    // cout << "啊大大";
 
     return 0;
 }
