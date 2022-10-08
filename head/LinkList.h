@@ -99,7 +99,7 @@ template <class T> bool LinkList<T>::getData(int index, T &data) {
 template <class T> void LinkList<T>::removeAll() {
     while (head->next) {
         LinkNode<T> *tmp = head->next;
-        head = tmp->next;
+        head->next = tmp->next;
         delete tmp;
     }
 }
@@ -205,6 +205,7 @@ template <class T> bool LinkList<T>::reverse2() {
         return false;
     }
     head->next = reverse2Node(head->next, NULL);
+    cout<<head->next->data<<"dadasad"<<endl;
 
     return true;
 }
