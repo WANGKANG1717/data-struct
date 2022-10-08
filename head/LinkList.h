@@ -6,8 +6,9 @@
  * @date: 2022-10-06 15:57:28
  * @description: 单链表模板类
  */
-#include "CustomException.h"
-
+/**
+ * 不再使用异常，麻烦
+ */
 #include <cstddef>
 #include <iostream>
 using namespace std;
@@ -41,9 +42,6 @@ template <class T> class LinkList : public LinkNode<T> {
     LinkNode<T> *curr;
     int length;
 
-    inline void checkRange() const;
-    inline void checkRange(int index) const;
-
   public:
     LinkList();
     ~LinkList();
@@ -70,20 +68,6 @@ template <class T> LinkList<T>::LinkList() {
 
 template <class T> LinkList<T>::~LinkList() { removeAll(); }
 
-template <class T> inline void LinkList<T>::checkRange() const {
-    if (length == 0) {
-        throw OutOfRange(1);
-    }
-}
-
-template <class T> inline void LinkList<T>::checkRange(int index) const {
-    if (length == 0) {
-        throw OutOfRange(1);
-    } else if (index < 0 || index >= length) {
-        throw OutOfRange(length, index, 1);
-    }
-}
-
 /**
  * @date: 2022-10-07 13:23:06
  * @description: 尾插法创建单链表
@@ -100,7 +84,11 @@ template <class T> void LinkList<T>::create(T data[], int n) {
 }
 
 template <class T> T LinkList<T>::getData(int index) {
-    checkRange(index);
+    if (index < 0 || index > length) {
+        cout << "Error: out of Range";
+        return NULL;
+    }
+
     curr = head->next;
     for (int i = 0; i < index; i++) {
         curr = curr->next;
@@ -136,9 +124,12 @@ template <class T> bool LinkList<T>::isEmpty() {
 template <class T> int LinkList<T>::getLength() { return length; }
 
 template <class T> LinkNode<T> *LinkList<T>::Locate(T x) {
-    checkRange();
+    if (length == 0) {
+        cout << "Error: Empty LinkList!" << endl;
+        return;
+    }
     LinkNode<T> *p = head->next;
-    for (int i = 0; i < length; i++, p=p->next) {
+    for (int i = 0; i < length; i++, p = p->next) {
         if (p->data == x) {
             break;
         }

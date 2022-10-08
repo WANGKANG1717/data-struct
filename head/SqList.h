@@ -6,7 +6,10 @@
  * @date: 2022-10-04 18:49:54
  * @description: 顺序表模板类
  */
-#include "CustomException.h"
+
+/**
+ * 后期思考之后，决定取消异常抛出，费时费事，还不怎么用
+ */
 
 #include <cstddef>
 #include <iostream>
@@ -20,10 +23,6 @@ template <class T> class SqList {
     T *data;
     int length;
 
-    //检查越界
-    inline void checkRange() const;
-    inline void checkRange(int index) const;
-    inline void checkRange(int low, int high) const;
     //比较函数 默认比较器
     //本来想默认一个存储器的，结果失败了
     //还是暂时放弃
@@ -72,28 +71,6 @@ template <class T> SqList<T>::~SqList() {
     cout << "~SqList: delete success!" << endl;
 }
 
-template <class T> inline void SqList<T>::checkRange() const {
-    if (length == 0) {
-        throw OutOfRange();
-    }
-}
-
-template <class T> inline void SqList<T>::checkRange(int index) const {
-    if (length == 0) {
-        throw OutOfRange();
-    } else if (index < 0 || index >= length) {
-        throw OutOfRange(length, index);
-    }
-}
-
-template <class T> inline void SqList<T>::checkRange(int low, int high) const {
-    if (length == 0) {
-        throw OutOfRange();
-    } else if (low < 0 || high >= length || low > high) {
-        throw OutOfRange(length, low, high);
-    }
-}
-
 template <class T> inline bool SqList<T>::cmp(T a, T b) {
     return a<b;
 }
@@ -101,17 +78,26 @@ template <class T> inline bool SqList<T>::cmp(T a, T b) {
 template <class T> int SqList<T>::getLength() const { return length; }
 
 template <class T> T SqList<T>::getData(int index) const {
-    checkRange(index);
+    if(index<0 || index>length) {
+        cout<<"Error: out of Range"<<endl;
+        return NULL;
+    }
     return data[index];
 }
 
 template <class T> void SqList<T>::setData(T x, int index) {
-    checkRange(index);
+    if(index<0 || index>length) {
+        cout<<"Error: out of Range"<<endl;
+        return NULL;
+    }
     data[index] = x;
 }
 
 template <class T> void SqList<T>::print() const {
-    checkRange();
+    if(length==0) {
+        cout<<"Error: Empty SqList!"<<endl;
+        return ;
+    }
     for (int i = 0; i < length; i++) {
         cout << data[i] << " ";
     }
@@ -119,7 +105,14 @@ template <class T> void SqList<T>::print() const {
 }
 
 template <class T> void SqList<T>::print(int low, int high) const {
-    checkRange(low, high);
+    if(length==0) {
+        cout<<"Error: Empty SqList!"<<endl;
+        return ;
+    }
+    else if(low<0|| high>length || low>high) {
+        cout<<"Error: Wrong Range!"<<endl;
+        return ;
+    }
     for (int i = low; i <= high; i++) {
         cout << data[i] << " ";
     }
@@ -127,7 +120,10 @@ template <class T> void SqList<T>::print(int low, int high) const {
 }
 
 template <class T> void SqList<T>::insert(int index, T x) {
-    checkRange(index);
+    if(index<0 || index>length) {
+        cout<<"Error: out of Range";
+        return ;
+    }
     cout << "insert!" << endl;
     for (int i = length - 1; i > index; i--) {
         data[i] = data[i - 1];
@@ -136,7 +132,10 @@ template <class T> void SqList<T>::insert(int index, T x) {
 }
 
 template <class T> void SqList<T>::_delete(int index) {
-    checkRange(index);
+    if(index<0 || index>length) {
+        cout<<"Error: out of Range";
+        return ;
+    }
     cout << "delete!" << endl;
     for (int i = index; i <length-1; i++) {
         data[i] = data[i + 1];
@@ -145,7 +144,14 @@ template <class T> void SqList<T>::_delete(int index) {
 
 template <class T>
 void SqList<T>::bubbleSort(int low, int high, bool (*func)(T, T))  {
-    checkRange(low, high);
+    if(length==0) {
+        cout<<"Error: Empty SqList!"<<endl;
+        return ;
+    }
+    else if(low<0|| high>length || low>high) {
+        cout<<"Error: Wrong Range!"<<endl;
+        return ;
+    }
     cout << "bubbleSort" << endl;
     for (int i = high; i > low; i--) {
         for (int j = low; j < i; j++) {
@@ -157,7 +163,14 @@ void SqList<T>::bubbleSort(int low, int high, bool (*func)(T, T))  {
 }
 
 template <class T> int SqList<T>::binarySearch(int low, int high, T x) {
-    checkRange(low, high);
+    if(length==0) {
+        cout<<"Error: Empty SqList!"<<endl;
+        return -1;
+    }
+    else if(low<0|| high>length || low>high) {
+        cout<<"Error: Wrong Range!"<<endl;
+        return -1;
+    }
     cout << "binarySearch" << endl;
     while(low<=high) {
         int mid=(low+high)/2;
@@ -175,7 +188,14 @@ template <class T> int SqList<T>::binarySearch(int low, int high, T x) {
 }
 
 template <class T> int SqList<T>::search(int low, int high, T x) {
-    checkRange(low, high);
+    if(length==0) {
+        cout<<"Error: Empty SqList!"<<endl;
+        return -1;
+    }
+    else if(low<0|| high>length || low>high) {
+        cout<<"Error: Wrong Range!"<<endl;
+        return -1;
+    }
     for(int i=low; i<high; i++) {
         if(data[i]==x) {
             return i;
@@ -185,7 +205,14 @@ template <class T> int SqList<T>::search(int low, int high, T x) {
 }
 
 template <class T> void SqList<T>::reverse(int low, int high) {
-    checkRange(low, high);
+    if(length==0) {
+        cout<<"Error: Empty SqList!"<<endl;
+        return ;
+    }
+    else if(low<0|| high>length || low>high) {
+        cout<<"Error: Wrong Range!"<<endl;
+        return ;
+    }
     while(low<high) {
         swap(data[low], data[high]);
         low++;
