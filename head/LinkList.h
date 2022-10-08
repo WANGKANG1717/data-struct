@@ -39,6 +39,8 @@ template <class T> class LinkList : public LinkNode<T> {
     LinkNode<T> *head;
     int length;
 
+    LinkNode<T> *reverse2Node(LinkNode<T> *p, LinkNode<T> *pre);
+
   public:
     LinkList();
     ~LinkList();
@@ -47,11 +49,13 @@ template <class T> class LinkList : public LinkNode<T> {
     bool getData(int index, T &data); //
     LinkNode<T> *Locate(T x);         //
     bool isEmpty();                   //
-    bool insert(int index, T);
-    bool remove(int index);
-    void removeAll(); //
-    void print();     //
-    int getLength();  //
+    bool insert(int index, T);        //
+    bool remove(int index);           //
+    void removeAll();                 //
+    void print();                     //
+    int getLength();                  //
+    bool reverse();                   //
+    bool reverse2();
 };
 
 template <class T> LinkList<T>::LinkList() {
@@ -69,11 +73,11 @@ template <class T> LinkList<T>::~LinkList() { removeAll(); }
 
 template <class T> void LinkList<T>::create(T data[], int n) {
     T x;
-    LinkNode<T> *p=head;
+    LinkNode<T> *p = head;
     for (int i = 0; i < n; i++) {
         LinkNode<T> *tmp = new LinkNode<T>(data[i], NULL);
         p->next = tmp;
-        p=tmp;
+        p = tmp;
         length++;
     }
 }
@@ -101,6 +105,10 @@ template <class T> void LinkList<T>::removeAll() {
 }
 
 template <class T> void LinkList<T>::print() {
+    if (length == 0) {
+        cout << "Print: Empty LinkList!" << endl;
+        return;
+    }
     LinkNode<T> *p = head->next;
     while (p) {
         cout << p->data << " ";
@@ -166,6 +174,49 @@ template <class T> bool LinkList<T>::remove(int index) {
     delete (p);
 
     return true;
+}
+
+//·ÇµÝ¹éÄæ×ª
+template <class T> bool LinkList<T>::reverse() {
+    if (length == 0) {
+        cout << "Reverse: Empty LinkList!" << endl;
+        return false;
+    }
+    LinkNode<T> *pre, *cur, *rear;
+    pre = NULL;
+    cur = head->next;
+    rear = cur->next;
+    while (cur) {
+        cur->next = pre;
+        pre = cur;
+        cur = rear;
+        if (rear)
+            rear = rear->next;
+    }
+    head->next = pre;
+
+    return true;
+}
+
+//µÝ¹éÄæ×ª
+template <class T> bool LinkList<T>::reverse2() {
+    if (length == 0) {
+        cout << "Reverse2: Empty LinkList!" << endl;
+        return false;
+    }
+    head->next = reverse2Node(head->next, NULL);
+
+    return true;
+}
+
+template <class T>
+LinkNode<T> *LinkList<T>::reverse2Node(LinkNode<T> *p, LinkNode<T> *pre) {
+    LinkNode<T> *rear = p->next;
+    p->next = pre;
+    if (rear) {
+        return reverse2Node(rear, p);
+    } else
+        return p;
 }
 
 #endif
