@@ -55,7 +55,7 @@ template <class T> class LinkList : public LinkNode<T> {
     void print();                     //
     int getLength();                  //
     bool reverse();                   //
-    bool reverse2();
+    bool reverse2();                  //ตÝน้
 };
 
 template <class T> LinkList<T>::LinkList() {
@@ -205,7 +205,7 @@ template <class T> bool LinkList<T>::reverse2() {
         return false;
     }
     head->next = reverse2Node(head->next, NULL);
-    cout<<head->next->data<<"dadasad"<<endl;
+    cout << head->next->data << "dadasad" << endl;
 
     return true;
 }
