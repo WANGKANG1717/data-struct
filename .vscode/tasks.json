@@ -9,7 +9,10 @@
 				"-g",
 				"${file}",
 				"-o",
-				"${fileDirname}\\${fileBasenameNoExtension}.exe",
+				//需要先在工作空间中新建一个build文件夹
+				"${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe",
+				//此命令不需要建build文件夹
+				// "${fileDirname}\\${fileBasenameNoExtension}.exe",
 				"-std=c++17"
 			],
 			"options": {
@@ -23,7 +26,8 @@
 		{
 			"type": "shell",
 			"label": "Run",
-			"command": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+			"command": "${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe",
+			// "${fileDirname}\\${fileBasenameNoExtension}.exe",
 			"problemMatcher": [
 				"$gcc"
 			],
@@ -40,7 +44,8 @@
 		{
 			"type": "shell",
 			"label": "Build->Run",
-			"command": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+			"command": "${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe",
+			// "${fileDirname}\\${fileBasenameNoExtension}.exe",
 			"problemMatcher": [
 				"$gcc"
 			],
