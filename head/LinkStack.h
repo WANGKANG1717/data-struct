@@ -15,19 +15,18 @@ using namespace std;
 #define __LINKSTACK_H__
 
 template <class T> class LinkNode {
-  private:
-    T data;
-    LinkNode *next;
-
   public:
-    LinkNode() next(NULL) {}
+    T data;
+    LinkNode<T> *next;
+
+    LinkNode() : next(NULL) {}
     LinkNode(T data, LinkNode<T> *next) : data(data), next(next) {}
-    ~LinkNOde() {}
+    ~LinkNode() {}
 };
 
 template <class T> class LinkStack {
   private:
-    LinkNode *top;
+    LinkNode<T> *top;
     int length;
 
   public:
@@ -37,8 +36,55 @@ template <class T> class LinkStack {
     void clear();
     int getLength();
     T getTop();
-    bool Push(T x);
+    bool push(T x);
     T pop();
 };
+template <class T> LinkStack<T>::LinkStack() {
+    top = new LinkNode<T>();
+    length = 0;
+}
+template <class T> LinkStack<T>::~LinkStack() { clear(); }
+
+template <class T> bool LinkStack<T>::isEmpty() {
+    if (top->next == NULL)
+        return true;
+    else
+        return false;
+}
+template <class T> void LinkStack<T>::clear() {
+    LinkNode<T> *p;
+    while (top->next) {
+        p = top->next;
+        top->next = p->next;
+        length--;
+        delete (p);
+    }
+}
+template <class T> int LinkStack<T>::getLength() { return length; }
+template <class T> T LinkStack<T>::getTop() {
+    if (isEmpty()) {
+        cout << "Stack is empty!" << endl;
+        return NULL;
+    }
+    return top->next->data;
+}
+template <class T> bool LinkStack<T>::push(T x) {
+    LinkNode<T> *p = new LinkNode<T>(x, top->next);
+    top->next = p;
+    length++;
+    return true;
+}
+template <class T> T LinkStack<T>::pop() {
+    if (isEmpty()) {
+        cout << "Stack is empty!" << endl;
+        return NULL;
+    }
+    LinkNode<T> *p = top->next;
+    top->next = p->next;
+    T x = p->data;
+    delete (p);
+    length--;
+    return x;
+}
 
 #endif
