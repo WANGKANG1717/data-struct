@@ -30,7 +30,7 @@ const int mod = 1e9 + 7;
 int main() {
     cio;
     cout<<"12122"<<endl;
-    
+
     
     return 0;
 }
