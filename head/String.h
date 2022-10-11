@@ -24,31 +24,32 @@ class String {
     int size;
 
   public:
-    String();
-    String(const char *init);
-    String(const String &s);
-    ~String();
-    friend istream &operator>>(istream &in, const String &s);
-    friend ostream &operator<<(ostream &out, const String &s);
+    String();                                                  //
+    String(const char *init);                                  //
+    String(const String &s);                                   //
+    ~String();                                                 //
+    friend istream &operator>>(istream &in, const String &s);  //
+    friend ostream &operator<<(ostream &out, const String &s); //
     // istream &operator>>(istream &in);
     // ostream &operator<<(ostream &out);
-    int operator==(String &op) const;
-    int operator!=(String &op) const;
-    int operator!() const;
-    int operator<(String &op) const;
-    int operator>(String &op) const;
-    String &operator=(String &s);
-    String &operator=(char *ch);
+    int operator==(String &op) const; //
+    int operator!=(String &op) const; //
+    int operator!() const;            //
+    int operator<(String &op) const;  //
+    int operator>(String &op) const;  //
+    void operator=(const String &s);  //
+    void operator=(char *ch);         //
     String &operator+=(String &s);
-    char &operator[](int index) const;
+    char &operator[](int index) const; //
     int BF_find(const String &s) const;
     int KMP_find(const String &s);
     void getNext(int *next) const;
-    int getSize() const;
+    int getSize() const; //
 };
 String::String() { size = 0; }
 
 String::String(const char *init) {
+    cout << "String(const char *init)" << endl;
     size = strlen(init);
     ch = new char[size];
     for (int i = 0; i < size; i++) {
@@ -57,6 +58,7 @@ String::String(const char *init) {
 }
 
 String::String(const String &s) {
+    cout << "String(const String &s)" << endl;
     size = s.size;
     ch = new char[size];
     for (int i = 0; i < size; i++) {
@@ -65,7 +67,7 @@ String::String(const String &s) {
 }
 
 String::~String() {
-    if (ch)
+    if (size > 0)
         delete (ch);
 }
 
@@ -94,7 +96,7 @@ int String::operator==(String &op) const {
 
 int String::operator!=(String &op) const { return !(*this == op); }
 
-int String::operator!() const { return !(size == 0); }
+int String::operator!() const { return (size == 0); }
 
 int String::operator<(String &op) const {
     if (size < op.size)
@@ -105,20 +107,30 @@ int String::operator<(String &op) const {
         for (int i = 0; i < size; i++) {
             if (ch[i] < op[i])
                 return 1;
+            else if (ch[i] > op[i])
+                return 0;
         }
     }
     return 0;
 }
 int String::operator>(String &op) const { return !((*this) < op); }
 
-String &String::operator=(String &s) {
-    String p(s);
-    return p;
+void String::operator=(const String &s) {
+    cout << "String::operator=(const String &s)" << endl;
+    size = s.size;
+    ch = new char[size];
+    for (int i = 0; i < size; i++) {
+        ch[i] = s[i];
+    }
 }
 
-String &String::operator=(char *ch) {
-    String p(ch);
-    return p;
+void String::operator=(char *init) {
+    cout << "String::operator=(char *init)" << endl;
+    size = strlen(init);
+    ch = new char[size];
+    for (int i = 0; i < size; i++) {
+        ch[i] = init[i];
+    }
 }
 
 String &String::operator+=(String &s) { size += s.getSize(); }
