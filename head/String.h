@@ -15,6 +15,7 @@
 #ifndef __STRING_H__
 #define __STRING_H__
 
+#include <iostream>
 #include <ostream>
 #include <string.h>
 using namespace std;
@@ -32,24 +33,34 @@ class String {
     friend ostream &operator<<(ostream &out, const String &s); //
     // istream &operator>>(istream &in);
     // ostream &operator<<(ostream &out);
-    int operator==(String &op) const; //
-    int operator!=(String &op) const; //
-    int operator!() const;            //
-    int operator<(String &op) const;  //
-    int operator>(String &op) const;  //
-    void operator=(const String &s);  //
-    void operator=(char *ch);         //
-    String &operator+=(String &s);
-    char &operator[](int index) const; //
-    int BF_find(const String &s) const;
-    int KMP_find(const String &s);
-    void getNext(int *next) const;
-    int getSize() const; //
+    int operator==(String &op) const;   //
+    int operator!=(String &op) const;   //
+    int operator!() const;              //
+    int operator<(String &op) const;    //
+    int operator>(String &op) const;    //
+    String &operator=(const String &s); //
+    String &operator=(char *ch);        //
+    String operator+(const String &s);  //
+    String operator+=(const String &s); //
+    char &operator[](int index) const;  //
+    int BF_find(const String &s) const; //
+    int KMP_find(const String &s);      //
+    void getNext(int *next) const;      //
+    int getSize() const;                //
+    char *c_str() const;                //
+    /**
+     * @date: 2022-10-12 15:18:05
+     * @description: 明天搞完这两个函数，就可以开始树了
+     *              工程浩大啊
+     */
+    void reverse();
+    // next修正值
+    void getNextVal(int *next);
 };
 String::String() { size = 0; }
 
 String::String(const char *init) {
-    cout << "String(const char *init)" << endl;
+    // cout << "String(const char *init)" << endl;
     size = strlen(init);
     ch = new char[size];
     for (int i = 0; i < size; i++) {
@@ -58,7 +69,7 @@ String::String(const char *init) {
 }
 
 String::String(const String &s) {
-    cout << "String(const String &s)" << endl;
+    // cout << "String(const String &s)" << endl;
     size = s.size;
     ch = new char[size];
     for (int i = 0; i < size; i++) {
@@ -115,25 +126,54 @@ int String::operator<(String &op) const {
 }
 int String::operator>(String &op) const { return !((*this) < op); }
 
-void String::operator=(const String &s) {
-    cout << "String::operator=(const String &s)" << endl;
+String &String::operator=(const String &s) {
+    // cout << "String::operator=(const String &s)" << endl;
     size = s.size;
     ch = new char[size];
     for (int i = 0; i < size; i++) {
         ch[i] = s[i];
     }
+    return *this;
 }
 
-void String::operator=(char *init) {
-    cout << "String::operator=(char *init)" << endl;
+String &String::operator=(char *init) {
+    // cout << "String::operator=(char *init)" << endl;
     size = strlen(init);
     ch = new char[size];
     for (int i = 0; i < size; i++) {
         ch[i] = init[i];
     }
+    return *this;
 }
-
-String &String::operator+=(String &s) { size += s.getSize(); }
+String String::operator+(const String &s) {
+    int sSize = s.getSize();
+    const int newSize = size + sSize + 1;
+    // cout << "newSize==" << newSize << endl;
+    char *tmp = new char[newSize];
+    // strcpy(tmp, ch);
+    // strcat(tmp, s.c_str());
+    int index = 0;
+    for (int i = 0; i < size; i++) {
+        tmp[index++] = ch[i];
+    }
+    for (int i = 0; i < s.getSize(); i++) {
+        tmp[index++] = s[i];
+    }
+    /**
+     * @date: 2022-10-12 14:51:19
+     * @description:
+     * 看来C语言的东西有所遗忘，
+     * 连一个字符串数组的基本知识都搞了这么久
+     * 这里时len-1
+     */
+    tmp[newSize - 1] = '\0';
+    String Tmp(tmp);
+    return Tmp;
+}
+String String::operator+=(const String &s) {
+    *this = *this + s;
+    return *this;
+}
 char &String::operator[](int index) const { return ch[index]; }
 int String::getSize() const { return size; }
 
@@ -159,7 +199,7 @@ int String::BF_find(const String &s) const {
         }
     }
     if (j == slen) {
-        return i;
+        return i - j;
     } else {
         return -1;
     }
@@ -169,13 +209,13 @@ int String::KMP_find(const String &s) {
     if (s.getSize() > size) {
         return false;
     }
-    int slen = s.getSize();
-    int next[slen];
+    const int slen = s.getSize();
+    int *next = new int[slen];
     s.getNext(next);
     int i = 0;
     int j = 0;
     while (i < size && j < slen) {
-        if (ch[i] == s[j]) {
+        if (j == -1 || ch[i] == s[j]) {
             i++;
             j++;
         } else {
@@ -183,7 +223,7 @@ int String::KMP_find(const String &s) {
         }
     }
     if (j == slen) {
-        return i;
+        return i - j;
     } else {
         return -1;
     }
@@ -193,9 +233,10 @@ void String::getNext(int *next) const {
     for (int i = 0; i < size; i++) {
         next[i] = 0;
     }
-    int i = 0, j = 0;
-    while (i < size) {
-        if (j == 0 || ch[i] == ch[j]) {
+    next[0] = -1;
+    int i = 0, j = -1;
+    while (i < size - 1) {
+        if (j == -1 || ch[i] == ch[j]) {
             i++, j++;
             next[i] = j;
         } else {
@@ -203,5 +244,16 @@ void String::getNext(int *next) const {
         }
     }
 }
+char *String::c_str() const {
+    char *tmp = new char[size + 1];
+    for (int i = 0; i < size; i++) {
+        tmp[i] = ch[i];
+    }
+    tmp[size] = '\0';
+    return tmp;
+}
+void String::reverse() {}
+
+void String::getNextVal(int *next) {}
 
 #endif

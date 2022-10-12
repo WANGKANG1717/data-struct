@@ -33,39 +33,86 @@ const int mod = 1e9 + 7;
 #include "../head/String.h"
 
 int main() {
-    cio;
-    char tmp[11] = "1234567890";
-    String s(tmp);
-    cout << s.getSize() << endl;
-    // s << cout;
-    cout << s << endl;
-    // cin>>s;
-    // cout<<s<<endl;
-    String p(s);
-    debug(p.getSize());
-    debug(p);
 
-    char tmp2[11] = "9087654321";
-    String f = (tmp2);
-    debug((p == s));
-    debug((p == f));
-    debug(f);
-    debug((p != s));
-    debug((f != s));
-    String e;
-    debug(!e);
-    debug(!f);
-    debug((f < p));
-    debug((f > p));
-    debug((f < e));
-    debug((f > e));
-    debug((s < p));
-    debug((s > p));
+    char tmp[11] = "1231232211";
+    char tmp2[1100] = "1111111111111111111";
+    String s(tmp);
+    String pat(tmp2);
+    debug(s.BF_find(pat));
+    debug(s.KMP_find(pat));
+    int next[1100];
+    pat.getNext(next);
+    for (int i = 0; i < 20; i++) {
+        cout << next[i] << " ";
+    }
+    // cout << endl;
+    // debug(s);
+    // debug(s.getSize());
+    // String p(tmp2);
+    // debug(p);
+    // debug(p.getSize());
+    // String h = p + s;
+    // debug(h);
+    // String f = h + h;
+    // debug(f);
+    // debug(f.getSize());
+    // f += f;
+    // debug(f);
+    // debug(f.getSize());
+    // f += f;
+    // debug(f);
+    // debug(f.getSize());
+    // // String f = h + h;
+    // debug((h += h));
+    // debug(h.getSize());
+    // h += h;
+    // debug(h);
+    // debug(h.getSize());
+    //  cout << s.getSize() << endl;
+    //  // s << cout;
+    //  cout << s << endl;
+    //  // cin>>s;
+    //  // cout<<s<<endl;
+    //  String p(s);
+    //  debug(p.getSize());
+    //  debug(p);
+
+    // char tmp2[11] = "9087654321";
+    // String f = (tmp2);
+    // debug((p == s));
+    // debug((p == f));
+    // debug(f);
+    // debug((p != s));
+    // debug((f != s));
+    // String e;
+    // debug(!e);
+    // debug(!f);
+    // debug((f < p));
+    // debug((f > p));
+    // debug((f < e));
+    // debug((f > e));
+    // debug((s < p));
+    // debug((s > p));
 
     // f=p;
     // debug(f);
-    p=f;
-    debug(p);
+    // p = f;
+    // debug(p);
+    // cout<<p.c_str()<<endl;
+    //
+    // p = p + f;
+    // debug(p);
+    // debug(p.getSize());
+    // debug((p+p));
+    // debug((p+=p));
+    // char a[10];
+    // a[0]='1';
+    // a[1]='2';
+    // a[2]='\0';
+    // debug(a);
+    // debug(strlen(a));
+    // debug(p.c_str());
+    // debug(strlen(p.c_str()));
 
     return 0;
 }
