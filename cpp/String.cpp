@@ -34,17 +34,30 @@ const int mod = 1e9 + 7;
 
 int main() {
 
-    char tmp[11] = "1231232211";
-    char tmp2[1100] = "1111111111111111111";
+    char tmp[11] = "1234567891";
+    char tmp2[1100] = "121211212";
     String s(tmp);
     String pat(tmp2);
-    debug(s.BF_find(pat));
-    debug(s.KMP_find(pat));
-    int next[1100];
+
+    // s.reverse();
+    // debug(s);
+    // pat.reverse();
+    // debug(pat);
+
+    // debug(s.BF_find(pat));
+    // debug(s.KMP_find(pat));
+    int next[10];
+    int nextVal[10];
     pat.getNext(next);
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 10; i++) {
         cout << next[i] << " ";
     }
+    cout<<endl;
+    pat.getNextVal(nextVal);
+    for (int i = 0; i < 10; i++) {
+        cout << nextVal[i]+1 << " ";
+    }
+
     // cout << endl;
     // debug(s);
     // debug(s.getSize());

@@ -252,8 +252,36 @@ char *String::c_str() const {
     tmp[size] = '\0';
     return tmp;
 }
-void String::reverse() {}
+void String::reverse() {
+    if (size == 0) {
+        cout << "Empty String!" << endl;
+        return;
+    }
+    int low = 0, high = size - 1;
+    while (low < high) {
+        swap(ch[low], ch[high]);
+        low++;
+        high--;
+    }
+}
 
-void String::getNextVal(int *next) {}
+void String::getNextVal(int *next) {
+    for (int i = 0; i < size; i++) {
+        next[i] = 0;
+    }
+    next[0] = -1;
+    int i = 0, j = -1;
+    while (i < size - 1) {
+        if (j == -1 || ch[i] == ch[j]) {
+            i++, j++;
+            if (ch[i] == ch[j]) {
+                next[i] = next[j];
+            } else
+                next[i] = j;
+        } else {
+            j = next[j];
+        }
+    }
+}
 
 #endif
