@@ -41,8 +41,10 @@ const int mod = 1e9 + 7;
 #include "../head/BiTree.h"
 int main() {
     cio;
+    // data 1 2 4 0 0 5 0 0 3 0 0
     BiTree<int> T;
-    T.create(T.getRoot(), 0);
+    T.create(0);
+    T.preOrder(T.getRoot());
 
     return 0;
 }

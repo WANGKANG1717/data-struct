@@ -20,7 +20,7 @@ template <class T> class BiNode {
     BiNode() : lchild(NULL), rchild(NULL) {}
     BiNode(T data, BiNode<T> *lchild = NULL, BiNode<T> *rchild = NULL)
         : data(data), lchild(lchild), rchild(rchild) {}
-    ~BiNode();
+    ~BiNode(){};
     /**
      * @date: 2022-10-13 13:14:33
      * @description: 不搞这些，太麻烦了，得不偿失
@@ -58,7 +58,8 @@ template <class T> class BiTree : public BiNode<T> {
      * @return: NULL
      * @description: 根据提示按照前序序列创建二叉树
      */
-    void create(BiNode<T> *Root, T endFlag);
+    void create(T endFlag);
+    BiNode<T> *Create(T endFlag);
     bool isEmpty();
     int getDepth(int dep);
     BiNode<T> *getRoot();
@@ -89,25 +90,31 @@ template <class T> void BiTree<T>::clear(BiNode<T> *Root) {
 
 template <class T>
 void BiTree<T>::create(BiNode<T> *Root, T *data, T endFlag, int &i, int n) {
-    if (data[i] != endFlag) {
-        Root = new BiNode<T>(data[i]);
-        i++;
-        create(Root->lchild, data, endFlag, i, n);
-        create(Root->rchild, data, endFlag, i, n);
-    } else {
-        Root = NULL;
+    if (data[i] == endFlag) {
+        root = NULL;
+        return;
     }
+    root = new BiNode<T>(data[i]);
+    i++;
+    create(root->lchild, data, endFlag, i, n);
+    create(root->rchild, data, endFlag, i, n);
 }
-template <class T> void BiTree<T>::create(BiNode<T> *Root, T endFlag) {
+/**
+ * @date: 2022-10-13 15:18:41
+ * @description: 娘娘的，非得这样才行，真是花了好长时间才调试出来
+ *          如果使用传统的递归方式的话，不知道为什么，就是出不来
+ */
+template <class T> void BiTree<T>::create(T endFlag) { root = Create(endFlag); }
+template <class T> BiNode<T> *BiTree<T>::Create(T endFlag) {
     T x;
     cin >> x;
-    if (x != endFlag) {
-        Root = new BiNode<T>(x);
-        create(Root->lchild, endFlag);
-        create(Root->rchild, endFlag);
-    } else {
-        Root = NULL;
+    if (x == endFlag) {
+        return NULL;
     }
+    BiNode<T> *Root = new BiNode<T>(x);
+    Root->lchild = Create(endFlag);
+    Root->rchild = Create(endFlag);
+    return Root;
 }
 
 template <class T> bool BiTree<T>::isEmpty() {
