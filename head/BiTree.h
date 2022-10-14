@@ -88,6 +88,17 @@ template <class T> class BiTree : public BiNode<T> {
     void postOrder(BiNode<T> *Root);        //
     void postOrder2();                      //
     void levelOrder();                      //
+    /**
+     * @date: 2022-10-14 15:09:55
+     * @description:
+     * 最后六个函数，搞定之后开始图的算法，然后是查找，排序，还有一个哈夫曼树
+     */
+    int nodeCount0(); //叶节点
+    int nodeCount1(); //度为一的节点
+    int nodeCount2(); //度为二的节点
+    int createTree_Use_Pre_In_Order(int *preOrder, int inOrder, int n);
+    int createTree_Use_Post_In_Order(int *postOrder, int inOrder, int n);
+    int createTree_Use_Level_In_Order(int *inOrder, int LevelOrder, int n);
 };
 template <class T> BiTree<T>::BiTree() : root(NULL) {}
 
