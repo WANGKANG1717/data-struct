@@ -81,18 +81,13 @@ template <class T> class BiTree : public BiNode<T> {
     int getDepth();                         //
     int GetDepth(BiNode<T> *Root, int dep); //
     BiNode<T> *&getRoot();                  //
-    BiNode<T> *parent(BiNode<T> *target);
-    BiNode<T> *LeftSibing(BiNode<T> *target);
-    BiNode<T> *RightSibing(BiNode<T> *target);
-    BiNode<T> *Lchild(BiNode<T> *curr);
-    BiNode<T> *Rchild(BiNode<T> *curr);
-    void preOrder(BiNode<T> *Root);  //
-    void preOrder2();                //
-    void inOrder(BiNode<T> *Root);   //
-    void inOrder2();                 //
-    void postOrder(BiNode<T> *Root); //
-    void postOrder2();
-    void levelOrder(); //
+    void preOrder(BiNode<T> *Root);         //
+    void preOrder2();                       //
+    void inOrder(BiNode<T> *Root);          //
+    void inOrder2();                        //
+    void postOrder(BiNode<T> *Root);        //
+    void postOrder2();                      //
+    void levelOrder();                      //
 };
 template <class T> BiTree<T>::BiTree() : root(NULL) {}
 
@@ -159,61 +154,6 @@ template <class T> int BiTree<T>::GetDepth(BiNode<T> *Root, int dep) {
 }
 
 template <class T> BiNode<T> *&BiTree<T>::getRoot() { return root; }
-
-template <class T> BiNode<T> *BiTree<T>::parent(BiNode<T> *target) {
-    return getParent(root, NULL, target);
-}
-template <class T> BiNode<T> *BiTree<T>::LeftSibing(BiNode<T> *target) {
-    return getLeftSibing(root, NULL, target);
-}
-
-template <class T> BiNode<T> *BiTree<T>::RightSibing(BiNode<T> *target) {
-    return getRightSibing(root, NULL, target);
-}
-//
-template <class T>
-BiNode<T> *BiTree<T>::getParent(BiNode<T> *curr, BiNode<T> *pre,
-                                BiNode<T> *target) {
-    if (curr == NULL)
-        return NULL;
-    if (curr == target) {
-        return pre;
-    }
-    return getParent(curr->lchild, curr, target) |
-           getParent(curr->rchild, curr, target);
-}
-template <class T>
-BiNode<T> *BiTree<T>::getLeftSibing(BiNode<T> *curr, BiNode<T> *target) {
-    if (curr == NULL)
-        return NULL;
-    if (curr->rchild == target) {
-        return curr->lchild;
-    }
-    return getLeftSibling(curr->lchild, target) |
-           getLeftSibling(curr->rchild, target);
-}
-template <class T>
-BiNode<T> *BiTree<T>::getRightSibing(BiNode<T> *curr, BiNode<T> *target) {
-    if (curr == NULL)
-        return NULL;
-    if (curr->lchild == target) {
-        return curr->rchild;
-    }
-    return getLeftSibling(curr->lchild, target) |
-           getLeftSibling(curr->rchild, target);
-}
-//
-template <class T> BiNode<T> *BiTree<T>::Lchild(BiNode<T> *curr) {
-    if (curr == NULL)
-        return NULL;
-    return curr->lchild;
-}
-
-template <class T> BiNode<T> *BiTree<T>::Rchild(BiNode<T> *curr) {
-    if (curr == NULL)
-        return NULL;
-    return curr->rchild;
-}
 
 template <class T> void BiTree<T>::preOrder(BiNode<T> *Root) {
     if (Root) {

@@ -65,6 +65,7 @@ int main() {
     debug(T2.getDepth());
     debug(T3.getDepth());
     debug(T4.getDepth());
+
     // T.preOrder(T.getRoot());
     // cout << endl;
     // T.inOrder(T.getRoot());
@@ -86,12 +87,12 @@ int main() {
     // T2.preOrder2();
     // cout << endl;
     // T2.preOrder(T2.getRoot());
-    T.postOrder2();
-    cout << endl;
-    T2.postOrder2();
-    cout << endl;
-    T3.postOrder2();
-    T4.postOrder2();
+    // T.postOrder2();
+    // cout << endl;
+    // T2.postOrder2();
+    // cout << endl;
+    // T3.postOrder2();
+    // T4.postOrder2();
     // debug(T.isEmpty());
     // T.clear();
     // debug(T.isEmpty());
