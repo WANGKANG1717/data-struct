@@ -17,3 +17,5 @@ build/String.exe
 .VSCodeCounter/2022-10-13_14-17-07/results.json
 .VSCodeCounter/2022-10-13_14-17-07/results.md
 .VSCodeCounter/2022-10-13_14-17-07/results.txt
+build/.*
+
