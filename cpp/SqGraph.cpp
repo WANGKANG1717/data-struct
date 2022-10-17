@@ -37,21 +37,45 @@ int main() {
     SqGraph G(5);
     // G.print();
     G.setEdge(0, 1, 1);
-    G.setEdge(0, 2, 4);
-    G.setEdge(0, 3, 5);
-    G.setEdge(0, 4, 1000);
-    G.setEdge(1, 2, 3);
-    G.setEdge(2, 3, 2);
+    G.setEdge(1, 2, 2);
+    G.setEdge(1, 4, 3);
+    G.setEdge(4, 3, 1);
+    // G.setEdge(2, 4, 3);
     // G.print();
     //
-    debug(G.edgeNum());
-    debug(G.getWeight(0));
-    debug(G.getWeight(1));
-    debug(G.getWeight(2));
-    debug(G.getWeight(3));
-    debug(G.getWeight(4));
+    // debug(G.edgeNum());
+    // debug(G.getWeight(0));
+    // debug(G.getWeight(1));
+    // debug(G.getWeight(2));
+    // debug(G.getWeight(3));
+    // debug(G.getWeight(4));
 
-    G.dfs(0);
+    // G.dfs(0);
+    // cout << endl;
+    // G.dfs(1);
+    // cout << endl;
+    // G.dfs(2);
+    // cout << endl;
+    // G.dfs(3);
+    // cout << endl;
+    // G.dfs(4);
+    // cout << endl;
+
+    //
+
+    // G.bfs(0);
+    // cout << endl;
+    // G.bfs(1);
+    // cout << endl;
+
+    // G.bfs(2);
+    // cout << endl;
+
+    // G.bfs(3);
+    // cout << endl;
+
+    // G.bfs(4);
+    // cout << endl;
 
     return 0;
 }

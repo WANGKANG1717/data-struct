@@ -7,9 +7,17 @@
  * @description: 邻接矩阵存储的图
  */
 
+/**
+ * @date: 2022-10-17 18:26:54
+ * @description: 后面的算法不再使用类来实现，太麻烦了，也不实用，不要再犯唯心主义的错误了
+ */
+
 #include <stdio.h>
 
+#include <algorithm>
 #include <iostream>
+
+#include "../head/LinkQueue.h"
 using namespace std;
 
 #ifndef __SQGRAPH_H__
@@ -35,7 +43,7 @@ class SqGraph {
    private:
     int **G;
     int n;
-    int *vis;
+    bool *vis;
 
    public:
     SqGraph(int n = 0);
@@ -53,13 +61,6 @@ class SqGraph {
     void dfs(int s);
     void DFS(int s);
     void bfs(int s);
-    //最短路径
-    void DIJ(int s);
-    void Flord();
-    //最小生成树
-    void Kruskal();
-    void Prim();
-    //有向图的关键路径，拓扑排序
 };
 SqGraph::SqGraph(int n) {
     init(n);
@@ -75,6 +76,7 @@ void SqGraph::init(int n) {
         exit(0);
     }
     G = new int *[n];
+    vis = new bool[n];
     for (int i = 0; i < n; i++) {
         G[i] = new int[n];
     }
@@ -132,12 +134,11 @@ void SqGraph::dfs(int s) {
         cout << "Error: please input reasonable index!" << endl;
         return;
     }
-    if (vis != NULL) delete (vis);
-    vis = new int[n]{0};
+    fill(vis, vis + n, false);
     DFS(s);
 }
 void SqGraph::DFS(int s) {
-    vis[s] = 1;
+    vis[s] = true;
     cout << s << " ";
     for (int i = 0; i < n; i++) {
         if (!vis[i] && G[s][i] != MAXINT) {
@@ -145,12 +146,23 @@ void SqGraph::DFS(int s) {
         }
     }
 }
-void SqGraph::bfs(int s) {}
-//最短路径
-void SqGraph::DIJ(int s) {}
-void SqGraph::Flord() {}
-//最小生成树
-void SqGraph::Kruskal() {}
-void SqGraph::Prim() {}
+
+void SqGraph::bfs(int s) {
+    LinkQueue<int> Q;
+    Q.EnQueue(s);
+    cout << s << " ";
+    vis[s] = true;
+    int k;
+    while (!Q.isEmpty()) {
+        Q.DeQueue(k);
+        for (int i = 0; i < n; i++) {
+            if (!vis[i] && G[k][i] != MAXINT) {
+                Q.EnQueue(i);
+                cout << i << " ";
+                vis[i] = true;
+            }
+        }
+    }
+}
 
 #endif
