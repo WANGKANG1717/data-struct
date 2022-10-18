@@ -37,6 +37,10 @@ void create() {
         Node* tmp = new Node(r, w);
         tmp->next = G[l]->next;
         G[l]->next = tmp;
+        //
+        // Node* tmp2 = new Node(l, w);
+        // tmp2->next = G[r]->next;
+        // G[r]->next = tmp2;
     }
     cout << "输入完成！" << endl;
 }
@@ -109,7 +113,7 @@ void Dij(int s) {
         while (p) {
             int j = p->to;
             int lenj = p->w;
-            if (len[k] + lenj < len[j]) {
+            if (!vis[k] && len[k] + lenj < len[j]) {
                 len[j] = len[k] + lenj;
                 pre[j] = k;
             }
@@ -147,7 +151,43 @@ void Floyd() {
         }
     }
 }
-void prim() {
+struct {
+    int from;
+    int w;
+} Edge[MAXN];
+
+void prim(int s) {
+    cout << "----------------------------" << endl;
+    for (int i = 0; i < n; i++) {
+        Edge[i].from = -1;
+        Edge[i].w = MAXINT_;
+        vis[i] = false;
+    }
+    Edge[s].w = 0;
+    for (int i = 0; i < n; i++) {
+        int k = -1;
+        int minw = MAXINT_;
+        for (int j = 0; j < n; j++) {
+            if (!vis[j] && Edge[j].w < minw) {
+                k = j;
+                minw = Edge[j].w;
+            }
+        }
+        if (k == -1) return;
+        vis[k] = true;
+        cout << Edge[k].from << " " << k << ' ' << Edge[k].w << endl;
+        Node* p = G[k]->next;
+        while (p) {
+            int j = p->to;
+            int w = p->w;
+            if (!vis[j] && Edge[j].w > w) {
+                Edge[j].w = w;
+                Edge[j].from = k;
+            }
+            p = p->next;
+        }
+    }
+    cout << "---------------------Prim" << endl;
 }
 void kruskal();
 
@@ -155,6 +195,7 @@ int main() {
     cout << "请输入定点数和边数" << endl;
     cin >> n >> e;
     create();
+
     ///
     // print();
     // fill(vis, vis + n, false);
@@ -166,20 +207,21 @@ int main() {
     // for (int i = 0; i < n; i++) {
     //     cout << i << " " << len[i] << " " << pre[i] << " " << endl;
     // }
-    Floyd();
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            printf("%10d ", len2[i][j]);
-        }
-        cout << endl;
-    }
-    cout << "----------" << endl;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            printf("%10d ", path[i][j]);
-        }
-        cout << endl;
-    }
+    // Floyd();
+    // for (int i = 0; i < n; i++) {
+    //     for (int j = 0; j < n; j++) {
+    //         printf("%10d ", len2[i][j]);
+    //     }
+    //     cout << endl;
+    // }
+    // cout << "----------" << endl;
+    // for (int i = 0; i < n; i++) {
+    //     for (int j = 0; j < n; j++) {
+    //         printf("%10d ", path[i][j]);
+    //     }
+    //     cout << endl;
+    // }
+    prim(0);
 
     return 0;
 }
@@ -201,3 +243,17 @@ int main() {
 2 3 2
 3 4 4
  */
+
+/*
+6 10
+0 1 6
+0 2 1
+0 3 5
+2 1 5
+2 3 5
+2 4 6
+2 5 4
+1 4 3
+4 5 6
+3 5 2
+  */
