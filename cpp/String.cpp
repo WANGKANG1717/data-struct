@@ -12,13 +12,13 @@
 #include <string>
 #include <vector>
 using namespace std;
-#define cio                                                                    \
-    ios::sync_with_stdio(false);                                               \
-    cin.tie(0);                                                                \
+#define cio                      \
+    ios::sync_with_stdio(false); \
+    cin.tie(0);                  \
     cout.tie(0);
-#define _T                                                                     \
-    int _T;                                                                    \
-    cin >> _T;                                                                 \
+#define _T     \
+    int _T;    \
+    cin >> _T; \
     while (_T--)
 #define MAXN 100010
 #define MAXINT 0x7f7f7f7f
@@ -33,11 +33,25 @@ const int mod = 1e9 + 7;
 #include "../head/String.h"
 
 int main() {
+    char tmp[] = "ababaaababaa";
+    String S(tmp);
+    int next[1000];
+    int nextval[1000];
+    S.getNext(next);
+    S.getNextVal(nextval);
+    for (int i = 0; i < 12; i++) {
+        cout << next[i] + 1 << " ";
+    }
+    cout << endl;
+    for (int i = 0; i < 12; i++) {
+        cout << nextval[i] + 1 << " ";
+    }
+    cout << endl;
 
-    char tmp[11] = "1234567891";
-    char tmp2[1100] = "121211212";
-    String s(tmp);
-    String pat(tmp2);
+    // char tmp[11] = "1234567891";
+    // char tmp2[1100] = "121211212";
+    // String s(tmp);
+    // String pat(tmp2);
 
     // s.reverse();
     // debug(s);
@@ -46,17 +60,17 @@ int main() {
 
     // debug(s.BF_find(pat));
     // debug(s.KMP_find(pat));
-    int next[10];
-    int nextVal[10];
-    pat.getNext(next);
-    for (int i = 0; i < 10; i++) {
-        cout << next[i] << " ";
-    }
-    cout<<endl;
-    pat.getNextVal(nextVal);
-    for (int i = 0; i < 10; i++) {
-        cout << nextVal[i]+1 << " ";
-    }
+    // int next[10];
+    // int nextVal[10];
+    // pat.getNext(next);
+    // for (int i = 0; i < 10; i++) {
+    //     cout << next[i] << " ";
+    // }
+    // cout<<endl;
+    // pat.getNextVal(nextVal);
+    // for (int i = 0; i < 10; i++) {
+    //     cout << nextVal[i]+1 << " ";
+    // }
 
     // cout << endl;
     // debug(s);
