@@ -38,9 +38,9 @@ void create() {
         tmp->next = G[l]->next;
         G[l]->next = tmp;
         //
-        // Node* tmp2 = new Node(l, w);
-        // tmp2->next = G[r]->next;
-        // G[r]->next = tmp2;
+        Node* tmp2 = new Node(l, w);
+        tmp2->next = G[r]->next;
+        G[r]->next = tmp2;
     }
     cout << "输入完成！" << endl;
 }
@@ -189,7 +189,53 @@ void prim(int s) {
     }
     cout << "---------------------Prim" << endl;
 }
-void kruskal();
+
+struct KEDGE {
+    int from;
+    int to;
+    int w;
+} kEdge[MAXN];
+int cmp(KEDGE a, KEDGE b) {
+    return a.w < b.w;
+}
+int B[MAXN];
+void init() {
+    for (int i = 0; i < MAXN; i++) {
+        B[i] = i;
+    }
+}
+int getRoot(int s) {
+    return (B[s] == s) ? s : B[s] = getRoot(B[s]);
+}
+void merge(int i, int j) {
+    int root1 = getRoot(i);
+    int root2 = getRoot(j);
+    if (root1 != root2) {
+        B[root2] = root1;
+    }
+}
+void kruskal() {
+    int edgeCnt = 0;
+    for (int i = 0; i < n; i++) {
+        Node* p = G[i]->next;
+        while (p) {
+            int to = p->to;
+            int w = p->w;
+            kEdge[edgeCnt++] = {i, to, w};
+            p = p->next;
+        }
+    }
+    sort(kEdge, kEdge + edgeCnt, cmp);
+    init();
+    for (int i = 0; i < edgeCnt; i++) {
+        int from = kEdge[i].from;
+        int to = kEdge[i].to;
+        if (getRoot(from) != getRoot(to)) {
+            merge(from, to);
+            cout << "<" << from << " " << to << " " << kEdge[i].w << ">" << endl;
+        }
+    }
+}
 
 int main() {
     cout << "请输入定点数和边数" << endl;
@@ -221,7 +267,8 @@ int main() {
     //     }
     //     cout << endl;
     // }
-    prim(0);
+    // prim(0);
+    kruskal();
 
     return 0;
 }
