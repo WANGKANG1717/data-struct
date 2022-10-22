@@ -33,9 +33,11 @@ void insert(Node *&T, int x) {
 }
 
 void create() {
-    int Data[15] = {20, 24, 50, 57, 87, 94, 96,
-                    67, 14, 66, 95, 82, 42, 31, 26};
-    for (int i = 0; i < 15; i++) {
+    int n = 10;
+    // int Data[n] = {5, 2, 1, 3, 4, 9, 8, 7, 6, 10};
+    // int Data[n] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int Data[n] = {5, 2, 1, 3, 4, 9, 6, 7, 8, 10};
+    for (int i = 0; i < n; i++) {
         insert(BST, Data[i]);
     }
 }
@@ -51,22 +53,14 @@ Node *search(Node *T, int x) {
         return search(T->rchild, x);
     }
 }
-//课本上直接使用数据交换了，我认为不好，试一下手动更换节点
-void swap(Node *p, Node *r, Node *preP, Node *preR) {
-    Node *rl = r->lchild;
-    Node *rr = r->rchild;
-    (preP->lchild == p) ? preP->lchild = r : preP->rchild = r;
-    r->lchild = p->lchild;
-    r->rchild = p->rchild;
-    preR->rchild = p;
-    p->lchild = rl;
-    p->rchild = rr;
-}
-
+/**
+ * @date: 2022-10-21 16:16:57
+ * @description: 调试了好久，应该没什么问题了
+ */
 bool remove(int x) {
     Node *preP = NULL;
     Node *p = BST;
-    while (p->data != x) {
+    while (p && p->data != x) {
         preP = p;
         if (x > p->data) {
             p = p->rchild;
@@ -79,6 +73,7 @@ bool remove(int x) {
     }
     //如果被删的节点左右均不空
     if (p->lchild && p->rchild) {
+        // r指的是要删除节点的左孩子的最有下节点，也就是p的先驱
         Node *preR = p;
         Node *r = p->lchild;
         //开始找最右下的节点
@@ -88,25 +83,44 @@ bool remove(int x) {
         }
         //交换被删节点与最右下节点
         // 说明右子树不空
-        if (p->lchild == r) {
+        if (preR == p) {
+            r->rchild = p->rchild;
             (preP->lchild == p) ? preP->lchild = r : preP->rchild = r;
+            delete (p);
         } else {
-            swap(p, r, preP, preR);
+            // 说明需要交换节点
+            /**
+             * @date: 2022-10-21 15:13:27
+             * @description: 可知r的右节点一定为空。
+             */
+            // Node *rl = r->lchild;
+            preR->rchild = r->lchild;
+            //如果要删除的节点不为为根节点
+            r->lchild = p->lchild;
+            r->rchild = p->rchild;
+            //考虑到有可能删掉根节点，需要重新链接根节点
+            if (preP == NULL) {
+                BST = r;
+            } else {
+                (preP->lchild == p) ? preP->lchild = r : preP->rchild = r;
+            }
+            //重接preR的右子树为r的左子树
+            delete (p);
         }
-        preP = preR;
+    } else {
+        /**
+         * @date: 2022-10-21 15:21:22
+         * @description: 将剩余的三种情况统一为一种情况
+         */
+        Node *P = p->lchild ? p->lchild : p->rchild;
+        if (preP == NULL) {
+            BST = P;
+        } else {
+            (preP->lchild == p) ? preP->lchild = P : preP->rchild = P;
+        }
+        delete (p);
     }
-    //注意，这事p的左右子树中一定有一个空的
-    if (preP == NULL)
-        if (p->lchild) {
-            p = p->lchild;
-        } else if (p->rchild) {
-            p = p->rchild;
-        } else {
-            (preP->lchild == p) ? preP->lchild = NULL : preP->rchild = NULL;
-        }
-    // 全部嫁接完成
-    delete (p);
-    if (BST == NULL)
+    return true;
 }
 int main() {
     create();
@@ -116,16 +130,16 @@ int main() {
         cout << "false" << endl;
     }
     int x;
-    cout << "请输入要查找的数据(以-1结束):" << endl;
-    Node *p;
-    while (cin >> x && x != -1) {
-        p = search(BST, x);
-        if (p)
-            cout << p->data << endl;
-        else {
-            cout << "Not Found!" << endl;
-        }
-    }
+    // cout << "请输入要查找的数据(以-1结束):" << endl;
+    // Node *p;
+    // while (cin >> x && x != -1) {
+    //     p = search(BST, x);
+    //     if (p)
+    //         cout << p->data << endl;
+    //     else {
+    //         cout << "Not Found!" << endl;
+    //     }
+    // }
     cout << "请输入要删除的数据（以-1结束）:" << endl;
     while (cin >> x && x != -1) {
         bool flag = remove(x);
