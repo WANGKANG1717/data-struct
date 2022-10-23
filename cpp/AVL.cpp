@@ -29,7 +29,7 @@ typedef struct Node {
 void insert(AVLTree &T, int x);
 void create(AVLTree &T) {
     int N = 10;
-    int data[N] = {7, 5, 2, 1, 3, 0, 4, 9, 6, 8};
+    int data[N] = {5, 2, 7, 1, 4, 6, 8, 0, 3, 9};
     // cout << sizeof(data) / sizeof(int) << endl;
     for (int i = 0; i < N; i++) {
         insert(T, data[i]);
@@ -107,54 +107,113 @@ AVLTree search(AVLTree T, int x) {
  * @date: 2022-10-22 16:53:18
  * @description: 显示下能不能使用递归优雅的实现删除
  */
-void remove(AVLTree &T, int x) {
+/**
+ * @date: 2022-10-23 14:14:24
+ * @description: 干的漂亮，使用数据替换，进而避免麻烦的节点交换
+ *                 使用指针引用，进入是心啊方便的删除节点，NICE！
+ */
+/**
+ * @date: 2022-10-23 14:34:13
+ * @description: 终于，我把AVL树的删除搞定了！
+ */
+bool remove(AVLTree &T, int x) {
     if (T == NULL)
-        return;
+        return false;
     else if (T->data == x) {
+        /**
+         * @date: 2022-10-23 14:26:30
+         * @description: 这三种情况可以合三为一
+         */
         //第一种情况：叶子节点
         if (T->lchild == NULL && T->rchild == NULL) {
             AVLTree p = T;
             T = NULL;
             delete (p);
+            return true;
         }
         //第二种情况：左子树不为空，右子树为空
         else if (T->lchild != NULL && T->rchild == NULL) {
             AVLTree p = T;
             T = T->lchild;
             delete (p);
+            return true;
         }
         //第三种情况：左子树为空，右子树不为空
         else if (T->lchild == NULL && T->rchild != NULL) {
             AVLTree p = T;
             T = T->rchild;
             delete (p);
+            return true;
         }
         //第四种情况：左右字数均不为空
         else {
             //先找到T的后继节点
-            AVLTree p = T->lchild;
+            AVLTree p = T->lchild, r;
             /**
              * @date: 2022-10-22 17:03:12
              * @description: 做到这里了，关键是想好如何实现替换与删除，吃饭去了
              */
+            while (p->rchild) {
+                p = p->rchild;
+            }
+            //不交换节点了，太麻烦了，调试又难
+            int tmp = p->data;
+            p->data = T->data;
+            T->data = tmp;
         }
-    } else if (x < T->data) {
-        remove(T->lchild, x);
-    } else {
-        remove(T->rchild, x);
     }
+    //因为上面可能进行节点的数据的调换，所以这里使用这种操作，统一
+    int flag = false;
+    if (x < T->data) {
+        flag = remove(T->lchild, x);
+        int depL = getDepth(T->lchild);
+        int depR = getDepth(T->rchild);
+        //这种情况下肯定左子树变小了
+        if (depR - depL == 2) {
+            if (T->rchild->rchild != NULL) {
+                R(T);
+                cout << "R()" << endl;
+            } else {
+                RL(T);
+                cout << "RL()" << endl;
+            }
+        }
+    } else if (x > T->data) {
+        flag = remove(T->rchild, x);
+        int depL = getDepth(T->lchild);
+        int depR = getDepth(T->rchild);
+        //这种情况下肯定右子树变小了
+        if (depL - depR == 2) {
+            if (T->lchild->lchild != NULL) {
+                L(T);
+                cout << "L(T)" << endl;
+            } else {
+                LR(T);
+                cout << "LR(T)" << endl;
+            }
+        }
+    }
+    return flag;
 }
 
 int main() {
-    AVLTree T = NULL;
-    create(T);
+    AVLTree AVLT = NULL;
+    create(AVLT);
     int x;
+    // while (cin >> x && x != -1) {
+    //     cout << "搜索过程" << endl;
+    //     AVLTree p = search(T, x);
+    //     cout << "\n搜索结束" << endl;
+    //     if (p)
+    //         cout << p->data << endl;
+    // }
     while (cin >> x && x != -1) {
-        cout << "搜索过程" << endl;
-        AVLTree p = search(T, x);
-        cout << "\n搜索结束" << endl;
-        if (p)
-            cout << p->data << endl;
+        bool flag = remove(AVLT, x);
+        if (flag == true) {
+            cout << "移除成功" << endl;
+        } else {
+            cout << "移除失败" << endl;
+        }
     }
 
     return 0;
