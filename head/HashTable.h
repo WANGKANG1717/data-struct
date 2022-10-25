@@ -14,8 +14,14 @@ using namespace std;
 /// @brief 使用除留余数法解决冲突
 class Node {
    public:
-    int key;         ///键值
-    int value;       ///键值对应的数据
+    int key;    ///键值
+    int value;  ///键值对应的数据
+    /**
+     * @date: 2022-10-25 13:21:52
+     * @description: deleteTag==true  此节点数据别删除 此时不用管 tag
+     *               deleteTag==false && tag==true 此节点存在数据
+     *               deleteTag==false && tag==false 此节点不存在数据
+     */
     bool tag;        //是否存在数据
     bool deleteTag;  //此节点是否被删除
     Node() : tag(false), deleteTag(false){};
@@ -46,6 +52,8 @@ class HashTable {
     int getM();
     int getLen();
     double getAlpha();
+    bool isEmpty(int key);
+    bool deleteNode(int key);
 };
 int HashTable::calculate_M(int len) {
     int M = len;
@@ -84,14 +92,14 @@ int HashTable::getKey(int x) {
     return x % M;
 }
 int HashTable::solveConflict1(int key) {
-    return key + 1;
+    return (key + 1) % len;
 }
 /// @brief 插入散列空间
 /// @param x 为要插入的值
 /// @return
 bool HashTable::insert(int x) {
     int key = getKey(x);
-    if (data[key].tag == false) {
+    if (isEmpty(key)) {
         data[key] = Node(key, x);
         cnt++;
         return true;
@@ -100,13 +108,13 @@ bool HashTable::insert(int x) {
     int p = key;
     do {
         p = solveConflict1(p);
-        if (data[p].tag == false) {
+        if (isEmpty(p)) {
             data[p] = Node(p, x);
             cnt++;
             return true;
         }
         //哈希表中不允许插入相同的键值
-        else if (data[key].tag == true && data[key].value == x) {
+        else if (data[p].value == x) {
             cout << "same Key!";
             return false;
         }
@@ -119,44 +127,40 @@ bool HashTable::insert(int x) {
 /// @return
 Node HashTable::search(int x) {
     int key = getKey(x);
-    if (data[key].tag == true && data[key].value == x) {
+    if (!isEmpty(key) && data[key].value == x) {
         return data[key];
     }
     int p = key;
     do {
         p = solveConflict1(p);
-        //没有删除 存在值 值为x 唯一确定一个Node节点
-        if (data[key].deleteTag == false && data[key].tag == true && data[key].value == x) {
+        if (!isEmpty(p) && data[p].value == x) {
             return data[p];
-        } else if (data[key].tag == false) {
-            //说明此节点虽然没有值，但是之前被删除了
-            if (data[key].deleteTag == true) {
-                continue;
-            }
-            cout << "查找失败2" << endl;
+        } else if (!isEmpty(p) && data[p].value != x) {
+            cout << "Not Found!" << endl;
             return Node();
-            //其他情况：有值，但是和x不一样
+        } else {
+            //说明哈希表中没有 进行插入操作
+            insert(x);
+            return data[p];
         }
     } while (p != key);
-    cout << "查找失败" << endl;
+    cout << "Not Found2!" << endl;
     return Node();
 }
 
 bool HashTable::remove(int x) {
     Node p = search(x);
     //说明查找成功，可以删除
-    if (p.tag == true && p.value == x) {
-        data[p.key].deleteTag = true;  //删除操作只需要将删除标记改一下即可
-        cnt--;
-        return true;
-    } else
-        return false;
+    return deleteNode(p.key);
 }
 
 void HashTable::clear() {
     cout << "Clear!" << endl;
-    delete[] data;
-    data = new Node[len];
+    //不需要物理删除
+    for (int i = 0; i < len; i++) {
+        data[i].deleteTag = true;
+        data[i].tag = false;
+    }
     cnt = 0;
 }
 
@@ -168,6 +172,21 @@ int HashTable::getLen() {
 }
 double HashTable::getAlpha() {
     return cnt * 1.0 / len;
+}
+
+bool HashTable::isEmpty(int key) {
+    if (data[key].deleteTag == false && data[key].tag == true) {
+        return false;
+    } else
+        return true;  // deleteTag=true || (tag=false && deleteTag=false)
+}
+bool HashTable::deleteNode(int key) {
+    if (!isEmpty(key)) {
+        data[key].deleteTag = true;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 #endif
