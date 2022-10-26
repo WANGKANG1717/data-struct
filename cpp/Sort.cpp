@@ -13,7 +13,8 @@ using namespace std;
 
 int main() {
     int data[10] = {5, 3, 1, 6, 9, 0, 8, 7, 2, 4};
-    InsertSort(data, 10);
+    // InsertSort(data, 10);
+    BinaryInsertSort(data, 10);
 
     for (int i = 0; i < 10; i++) {
         cout << data[i] << " ";

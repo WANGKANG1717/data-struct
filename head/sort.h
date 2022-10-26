@@ -6,7 +6,8 @@
  * @date: 2022-10-26 13:36:50
  * @description:  排序
  */
-
+#include <iostream>
+using namespace std;
 //插入排序
 /**
  * @date: 2022-10-26 13:40:00
@@ -24,9 +25,10 @@ template <class T>
 int cmp(T a, T b) {
     return a < b;
 }
+
 /**
- * @date: 2022-10-26 14:03:26
- * @description: 嘎嘎嘎，写的就是这么骚气！！
+ * @date: 2022-10-26 16:02:39
+ * @description: 简单插入排序
  */
 template <class T>
 void InsertSort(T data[], int n, int (*cmp)(T a, T b) = cmp) {
@@ -40,5 +42,36 @@ void InsertSort(T data[], int n, int (*cmp)(T a, T b) = cmp) {
                 break;
         }
         data[j] = tmp;
+    }
+}
+/**
+ * @date: 2022-10-26 16:02:16
+ * @description: 二分插入排序
+ */
+template <class T>
+void BinaryInsertSort(T data[], int n, int (*cmp)(T a, T b) = cmp) {
+    for (int i = 1; i < n; i++) {
+        int low = 0, high = i - 1;
+        T tmp = data[i];
+        /**
+         * @date: 2022-10-26 16:03:11
+         * @description: 这里是<=
+         */
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (cmp(tmp, data[mid]) > 0) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        for (int j = i; j > low; j--) {
+            data[j] = data[j - 1];
+        }
+        data[low] = tmp;
+        // for (int j = 0; j < i; j++) {
+        //     cout << data[j] << " ";
+        // }
+        // cout << endl;
     }
 }
