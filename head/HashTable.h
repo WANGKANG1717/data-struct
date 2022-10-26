@@ -24,9 +24,13 @@ class Node {
      */
     bool tag;        //是否存在数据
     bool deleteTag;  //此节点是否被删除
-    Node() : tag(false), deleteTag(false){};
+    Node() : value(-1), key(-1), tag(false), deleteTag(false){};
     Node(int key, int value) : key(key), value(value), tag(true), deleteTag(false){};
     ~Node(){};
+    friend ostream &operator<<(ostream &out, const Node &a) {
+        out << "value:" << a.value << " key:" << a.key << " tag:" << a.tag << " deleteTag:" << a.deleteTag;
+        return out;
+    }
 };
 class HashTable {
     static const int MAXSIZE = 100;
@@ -39,6 +43,7 @@ class HashTable {
     int cnt;       //哈希表中的已经插入的数据个数
     int calculate_M(int M);
     bool isPrime(int num);
+    bool Insert(int key, int x);
 
    public:
     HashTable(int len = MAXSIZE);
@@ -54,6 +59,8 @@ class HashTable {
     double getAlpha();
     bool isEmpty(int key);
     bool deleteNode(int key);
+    void print();
+    void init();
 };
 int HashTable::calculate_M(int len) {
     int M = len;
@@ -81,6 +88,7 @@ HashTable::HashTable(int len) {
     this->len = len;
     this->data = new Node[len]();
     this->M = calculate_M(len);
+    init();
 }
 
 HashTable::~HashTable() {
@@ -100,21 +108,17 @@ int HashTable::solveConflict1(int key) {
 bool HashTable::insert(int x) {
     int key = getKey(x);
     if (isEmpty(key)) {
-        data[key] = Node(key, x);
-        cnt++;
-        return true;
+        return Insert(key, x);
     }
     //线性探测法解决冲突
     int p = key;
     do {
         p = solveConflict1(p);
         if (isEmpty(p)) {
-            data[p] = Node(p, x);
-            cnt++;
-            return true;
+            return Insert(p, x);
         }
         //哈希表中不允许插入相同的键值
-        else if (data[p].value == x) {
+        else if (!isEmpty(p) && data[p].value == x) {
             cout << "same Key!";
             return false;
         }
@@ -129,18 +133,18 @@ Node HashTable::search(int x) {
     int key = getKey(x);
     if (!isEmpty(key) && data[key].value == x) {
         return data[key];
+    } else if (isEmpty(key)) {
+        Insert(key, x);
+        return data[key];
     }
     int p = key;
     do {
         p = solveConflict1(p);
         if (!isEmpty(p) && data[p].value == x) {
             return data[p];
-        } else if (!isEmpty(p) && data[p].value != x) {
-            cout << "Not Found!" << endl;
-            return Node();
-        } else {
+        } else if (isEmpty(p)) {
             //说明哈希表中没有 进行插入操作
-            insert(x);
+            Insert(p, x);
             return data[p];
         }
     } while (p != key);
@@ -183,10 +187,32 @@ bool HashTable::isEmpty(int key) {
 bool HashTable::deleteNode(int key) {
     if (!isEmpty(key)) {
         data[key].deleteTag = true;
+        cnt--;
         return true;
     } else {
         return false;
     }
+}
+void HashTable::print() {
+    cout << endl;
+    cout << "--------------" << endl;
+    for (int i = 0; i < len; i++) {
+        cout << data[i] << endl;
+    }
+    cout << "--------------" << endl;
+    cout << endl;
+}
+
+void HashTable::init() {
+    for (int i = 0; i < len; i++) {
+        data[i].key = i;
+        data[i].value = -1;
+    }
+}
+bool HashTable::Insert(int key, int x) {
+    data[key] = Node(key, x);
+    cnt++;
+    return true;
 }
 
 #endif
