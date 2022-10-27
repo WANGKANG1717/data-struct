@@ -124,6 +124,11 @@ void selectSort(T data[], int n) {
  * @description: 快速排序
  */
 
+/**
+ * @date: 2022-10-27 14:09:47
+ * @description: 对比了以前写的代码，越发简洁了
+ *                 码力值++     👌🙌👍
+ */
 template <class T>
 void QuickSort(T data[], int l, int r) {
     if (l >= r) return;
@@ -152,3 +157,5 @@ template <class T>
 void quickSort(T data[], int n) {
     QuickSort(data, 0, n - 1);
 }
+
+
