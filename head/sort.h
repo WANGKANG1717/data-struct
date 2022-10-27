@@ -6,6 +6,11 @@
  * @date: 2022-10-26 13:36:50
  * @description:  排序
  */
+
+/**
+ * @date: 2022-10-27 15:52:54
+ * @description: 注 此头文件中的函数0下标均被使用
+ */
 #include <iostream>
 using namespace std;
 //插入排序 简单插入排序 二分插入排序 希尔排序
@@ -96,7 +101,7 @@ void shellSort(T data[], int n, int (*cmp)(T a, T b) = cmp) {
  *              使用c++的重载比较号 则总是可行的
  */
 
-//选择排序 简单选择排序 快速排序
+//选择排序 简单选择排序 堆排序 树形选择排序
 
 /**
  * @date: 2022-10-27 13:24:39
@@ -112,9 +117,67 @@ void selectSort(T data[], int n) {
             }
         }
         if (index != i) {
-            int tmp = data[index];
+            T tmp = data[index];
             data[index] = data[i];
             data[i] = tmp;
+        }
+    }
+}
+
+/**
+ * @date: 2022-10-27 15:43:44
+ * @description: 堆排序 （非递归 效率更高）
+ */
+// c++不允许函数嵌套定义
+// 堆排序还是相当的优雅的数据结构
+// 可惜只能明天解决了
+#define lchild(x) ((x)*2 + 1)
+#define rchild(x) ((x)*2 + 2)
+#define parent(x) (((x)-1) / 2)
+template <class T>
+void buildHeap(T data, int n) {
+    for (int i = parent(n); i >= 0; i--) {
+        adjustHeapTop2Bottom(data, n, i);
+    }
+}
+template <class T>
+void adjustHeapTop2Bottom(T data, int n, int p) {
+    T tmp = data[p];
+    int s;
+    while (p <= (n - 1)) {
+        if (lchild(p) <= n - 1) {
+            T lc = data[lchild(p)];
+        }
+        if (lchild(p) + 1 <= n - 1) {
+            T rc = data[rchild(p)];
+        }
+    }
+}
+template <class T>
+void adjustHeapBottom2Top(T data, int n, int p) {
+}
+template <class T>
+void heapSort(T data, int n) {
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+// 交换排序 冒泡排序 快速排序
+
+/**
+ * @date: 2022-10-27 15:40:16
+ * @description: 冒泡排序
+ */
+
+template <class T>
+void bubbleSort(T data[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (data[j] > data[j + 1]) {
+                T tmp = data[j];
+                data[j] = data[j + 1];
+                data[j + 1] = tmp;
+            }
         }
     }
 }
@@ -157,5 +220,3 @@ template <class T>
 void quickSort(T data[], int n) {
     QuickSort(data, 0, n - 1);
 }
-
-

@@ -16,7 +16,7 @@ using namespace std;
 int main() {
     srand((int)time(NULL));
     int data[100000];
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10000; i++) {
         data[i] = rand() % 10;
     }
     // int data[10] = {5, 3, 1, 6, 9, 0, 8, 7, 2, 4};
@@ -26,8 +26,9 @@ int main() {
     // shellSort(data, 1000);
     // selectSort(data, 1000);
     quickSort(data, 1000);
+    // bubbleSort(data, 10000);
 
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10000; i++) {
         cout << data[i] << " ";
     }
     cout << endl;
