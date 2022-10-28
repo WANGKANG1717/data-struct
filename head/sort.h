@@ -273,20 +273,10 @@ void quickSort(T data[], int n) {
  * @description: 归并排序异常顺利的写完了！！！
  */
 #define mid(x, y) (((x) + (y)) / 2)
-/// @brief 归并排序主函数
-/// @tparam T
-/// @param data 数组
-/// @param l 低下标
-/// @param r 高下标
+//合并函数
+//合并之前要做好判断
 template <class T>
-void MergeSort(T data[], int l, int r) {
-    if (l >= r) return;
-    /// mid 向下取整
-    int mid = mid(l, r);
-    //先进行小的归并
-    MergeSort(data, l, mid);
-    MergeSort(data, mid + 1, r);
-    //
+void merge(T data[], int l, int mid, int r) {
     // l ~ mid   mid+1 ~ r
     int low = l, high = mid + 1, pos = 0;
     T *tmp = new T[r - l + 1];
@@ -308,6 +298,21 @@ void MergeSort(T data[], int l, int r) {
         data[i] = tmp[j];
     }
 }
+/// @brief 归并排序主函数
+/// @tparam T
+/// @param data 数组
+/// @param l 低下标
+/// @param r 高下标
+template <class T>
+void MergeSort(T data[], int l, int r) {
+    if (l >= r) return;
+    /// mid 向下取整
+    int mid = mid(l, r);
+    //先进行小的归并
+    MergeSort(data, l, mid);
+    MergeSort(data, mid + 1, r);
+    merge(data, l, mid, r);
+}
 
 /// @brief 归并排序
 /// @tparam T
@@ -318,7 +323,29 @@ void mergeSort(T data[], int n) {
     MergeSort(data, 0, n - 1);
 }
 
+/**
+ * @date: 2022-10-28 16:07:40
+ * @description: 非递归的归并函数
+ *              有点小bug 需要调试一下
+ */
 template <class T>
 void mergeSort2(T data[], int n) {
-    for(int i=0; i<)
+    // i步长 2, 4, 8, 16...
+    int k;
+    for (k = 2; k < n; k *= 2) {
+        int l, r, mid;
+        for (l = 0; l <= n - k; l += k) {
+            r = l + k - 1;
+            mid = mid(l, r);
+            merge(data, l, mid, r);
+        }
+        //最后可能还剩一小块，需要单独合并
+        if (l <= n - 1) {
+            r = n - 1;
+            int mid = mid(l, r);
+            merge(data, l, mid, r);
+        }
+    }
+    k /= 2;
+    merge(data, 0, k - 1, n - 1);
 }
