@@ -297,6 +297,16 @@ void quickSort(T data[], int n) {
 }
 
 /**
+ * @date: 2022-10-29 15:44:41
+ * @description: 快速排序的非递归排序
+ */
+template <class T>
+void quickSort2(T data[], int n) {
+    cout << "神么！有必要搞嘛！？？？？" << endl;
+    cout << "还得使用栈，不搞了不搞了！" << endl;
+}
+
+/**
  * @date: 2022-10-28 15:14:14
  * @description: 最后两个算法 归并排序 基数排序
  */
@@ -424,4 +434,13 @@ void mergeSort2(T data[], int n) {
     k /= 2;
     merge(data, tmp, 0, k - 1, n - 1);
     delete[] tmp;
+}
+
+/**
+ * @date: 2022-10-29 15:51:23
+ * @description: 基数排序
+ */
+// 仍待实现
+template <class T>
+void radixSort(T data, int n) {
 }
