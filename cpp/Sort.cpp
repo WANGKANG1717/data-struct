@@ -8,20 +8,17 @@
  */
 #include "../head/sort.h"
 
-#include <cstdlib>
-#include <ctime>
 #include <iostream>
 using namespace std;
 
 int main() {
-    srand((int)time(NULL));
     int data[100000];
-    int n = 1000;
+    int n = 60;
     int random = 2;
-    // int data[] = {1, 8, 9, 1, 2};
-    for (int i = 0; i < n; i++) {
-        data[i] = rand() % random;
-    }
+    int source[n] = {0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0};
+    cinRandomIntData(data, n, random);
+    // cinIntData(data, source, n);
+    // printData(data, n);
 
     // insertSort(data, 10);
     // binaryInsertSort(data, 10);
@@ -35,13 +32,9 @@ int main() {
     //     data[i] = x;
     //     adjustHeapBottom2Top(data, i);
     // }
-
     // mergeSort(data, n);
     mergeSort2(data, n);
-    for (int i = 0; i < n; i++) {
-        cout << data[i] << " ";
-    }
-    cout << endl;
+    printData(data, n);
 
     return 0;
 }

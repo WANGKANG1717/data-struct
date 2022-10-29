@@ -11,8 +11,40 @@
  * @date: 2022-10-27 15:52:54
  * @description: 注 此头文件中的函数0下标均被使用
  */
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 using namespace std;
+#define debug1(x) cout << #x << "=" << x << endl
+#define debug2(x, y) cout << #x << "=" << x << " " << #y << "=" << y << endl
+#define debug3(x, y, z) cout << #x << "=" << x << " " << #y << "=" << y << " " << #z << "=" << z << endl
+/**
+ * @date: 2022-10-29 14:16:10
+ * @description: 随机输入函数
+ */
+void cinRandomIntData(int data[], int n, int random) {
+    srand((int)time(NULL));
+    for (int i = 0; i < n; i++) {
+        data[i] = rand() % random;
+    }
+}
+void cinIntData(int data[], int source[], int n) {
+    for (int i = 0; i < n; i++) {
+        data[i] = source[i];
+    }
+}
+/**
+ * @date: 2022-10-29 14:15:29
+ * @description: 打印函数
+ */
+template <class T>
+void printData(T data[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << data[i] << ", ";
+    }
+    cout << endl;
+}
+
 //插入排序 简单插入排序 二分插入排序 希尔排序
 
 /// @brief 默认的排序函数，就是这么骚气！狗头🐶👌🙌👍
@@ -275,11 +307,20 @@ void quickSort(T data[], int n) {
 #define mid(x, y) (((x) + (y)) / 2)
 //合并函数
 //合并之前要做好判断
+// l 左边界（含） r 右边界（含） mid（含）
 template <class T>
-void merge(T data[], int l, int mid, int r) {
+void merge(T data[], T tmp[], int l, int mid, int r) {
+    // 这里最好做一个越界检查
+    if (l >= r || mid < l || mid > r) return;
+    // if (l >= r || mid < l || mid > r) {
+    //     debug3(l, mid, r);
+    //     exit(0);
+    // }
+    // if (l >= r) return;
     // l ~ mid   mid+1 ~ r
     int low = l, high = mid + 1, pos = 0;
-    T *tmp = new T[r - l + 1];
+    //频繁的进行申请空间的命令会降低算法的运行速度
+    // T *tmp = new T[r - l + 1];
     while (low <= mid && high <= r) {
         if (data[low] < data[high]) {
             tmp[pos++] = data[low++];
@@ -304,14 +345,14 @@ void merge(T data[], int l, int mid, int r) {
 /// @param l 低下标
 /// @param r 高下标
 template <class T>
-void MergeSort(T data[], int l, int r) {
+void MergeSort(T data[], T tmp[], int l, int r) {
     if (l >= r) return;
     /// mid 向下取整
     int mid = mid(l, r);
     //先进行小的归并
-    MergeSort(data, l, mid);
-    MergeSort(data, mid + 1, r);
-    merge(data, l, mid, r);
+    MergeSort(data, tmp, l, mid);
+    MergeSort(data, tmp, mid + 1, r);
+    merge(data, tmp, l, mid, r);
 }
 
 /// @brief 归并排序
@@ -320,7 +361,19 @@ void MergeSort(T data[], int l, int r) {
 /// @param n 数组中的元素个数
 template <class T>
 void mergeSort(T data[], int n) {
-    MergeSort(data, 0, n - 1);
+    T *tmp = NULL;
+    if (n > 0) {
+        tmp = new T[n];
+        if (!tmp) {
+            cout << "Error: storage space request failed" << endl;
+            return;
+        }
+    } else {
+        cout << "Error: n should > 0 !" << endl;
+        return;
+    }
+    MergeSort(data, tmp, 0, n - 1);
+    delete[] tmp;
 }
 
 /**
@@ -330,22 +383,45 @@ void mergeSort(T data[], int n) {
  */
 template <class T>
 void mergeSort2(T data[], int n) {
+    T *tmp = NULL;
+    if (n > 0) {
+        tmp = new T[n];
+        if (!tmp) {
+            cout << "Error: storage space request failed" << endl;
+            return;
+        }
+    } else {
+        cout << "Error: n should > 0 !" << endl;
+        return;
+    }
     // i步长 2, 4, 8, 16...
     int k;
-    for (k = 2; k < n; k *= 2) {
+    for (k = 2; k <= n; k *= 2) {
         int l, r, mid;
         for (l = 0; l <= n - k; l += k) {
             r = l + k - 1;
             mid = mid(l, r);
-            merge(data, l, mid, r);
+            merge(data, tmp, l, mid, r);
         }
-        //最后可能还剩一小块，需要单独合并
-        if (l <= n - 1) {
+        // debug1(l);
+        if (l < n - 1) {
+            // debug1(l);
+            /**
+             * @date: 2022-10-29 15:05:17
+             * @description: 这里要十分注意，最后一项要这么归并
+             *                 也就是将最后一项与前面的一段归并为一项
+             */
+            mid = l + k / 2 - 1;
             r = n - 1;
-            int mid = mid(l, r);
-            merge(data, l, mid, r);
+            //这里还得再做一个越界检查
+            //否则的话可能会出现越界错误
+            // if (mid >= l && mid <= r)
+            merge(data, tmp, l, l + k / 2 - 1, n - 1);
         }
+        // debug1(k);
+        // printData(data, n);
     }
     k /= 2;
-    merge(data, 0, k - 1, n - 1);
+    merge(data, tmp, 0, k - 1, n - 1);
+    delete[] tmp;
 }
