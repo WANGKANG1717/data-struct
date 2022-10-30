@@ -54,7 +54,8 @@
         "new": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "ctime": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

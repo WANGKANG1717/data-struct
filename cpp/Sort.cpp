@@ -13,12 +13,12 @@ using namespace std;
 
 int main() {
     int data[100000];
-    int n = 60;
-    int random = 20;
+    int n = 100;
+    int random = 2;
     int source[n] = {0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0};
     cinRandomIntData(data, n, random);
     // cinIntData(data, source, n);
-    // printData(data, n);
+    printData(data, n);
 
     // insertSort(data, 10);
     // binaryInsertSort(data, 10);
@@ -35,7 +35,8 @@ int main() {
     // mergeSort(data, n);
     // mergeSort2(data, n);
     // quickSort2(data, n);
-    radixSort(data, n);
+
+    radixSort(data, n, 10);
     printData(data, n);
 
     return 0;

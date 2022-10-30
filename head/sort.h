@@ -11,9 +11,11 @@
  * @date: 2022-10-27 15:52:54
  * @description: 注 此头文件中的函数0下标均被使用
  */
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <list>
 using namespace std;
 #define debug1(x) cout << #x << "=" << x << endl
 #define debug2(x, y) cout << #x << "=" << x << " " << #y << "=" << y << endl
@@ -440,7 +442,60 @@ void mergeSort2(T data[], int n) {
  * @date: 2022-10-29 15:51:23
  * @description: 基数排序
  */
-// 仍待实现
+
+// @date: 2022-10-30 14:17:49
+// @brief: 没想到基数排序实现起来还挺简单
+
+/// @brief 基数排序
+/// @tparam T 数据类型
+/// @param data 数据集
+/// @param n 大小
+/// @param radix 排序基数
 template <class T>
-void radixSort(T data, int n) {
+int getD(T data[], int n, int radix) {
+    T max_ = data[0];
+    for (int i = 1; i < n; i++) {
+        if (data[i] > max_) max_ = data[i];
+    }
+    int d = 0;
+    while (max_) {
+        d++;
+        max_ /= radix;
+    }
+    return d;
+}
+int power(int radix, int n) {
+    return pow(radix, n);
+}
+template <class T>
+void distribute(T data[], int n, int radix, int k, list<T> bucket[]) {
+    // @date: 2022-10-30 14:12:14
+    // @brief: 再进行分发之前要注意把桶内的元素清空
+    for (int i = 0; i < n; i++) {
+        int pos = (data[i] / power(radix, k)) % radix;
+        bucket[pos].push_back(data[i]);
+    }
+}
+template <class T>
+void collect(T data[], int n, int radix, int k, list<T> bucket[]) {
+    int cnt = 0;
+    for (int i = 0; i < radix; i++) {
+        for (auto p = bucket[i].begin(); p != bucket[i].end(); p++) {
+            data[cnt++] = *p;
+        }
+        bucket[i].clear();
+    }
+}
+template <class T>
+void radixSort(T data[], int n, int radix) {
+    if (n <= 0) return;
+    // @date: 2022-10-30 13:43:49
+    // @brief: d 为最高位
+    int d = getD(data, n, radix);
+    debug1(d);
+    list<T> bucket[radix];
+    for (int k = 0; k < d; k++) {
+        distribute(data, n, radix, k, bucket);
+        collect(data, n, radix, k, bucket);
+    }
 }
